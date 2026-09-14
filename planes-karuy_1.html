@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planes y precios · PAES Karuy</title>
+<style>
+  :root{
+    --indigo:#4f46e5;
+    --indigo-soft:#eef2ff;
+    --indigo-dark:#3730a3;
+    --violet:#8b5cf6;
+    --pink:#ec4899;
+    --ink:#161327;
+    --gray:#6b7280;
+    --gray-light:#e6e4f5;
+    --bg:#fbfaff;
+    --green:#16a34a;
+    --red:#dc2626;
+    --gold:#f59e0b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:inherit;letter-spacing:-.01em;}
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  ::selection{background:var(--indigo-soft);}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;position:relative;}
+
+  /* ---------- URGENCY BAR ---------- */
+  .urgency{
+    background:linear-gradient(90deg,var(--indigo-dark),var(--indigo) 50%,var(--violet));
+    color:#fff;text-align:center;padding:10px 16px;font-size:13.5px;font-weight:700;
+    letter-spacing:.01em;
+  }
+  .urgency span.tag{
+    background:rgba(255,255,255,.18);border-radius:999px;padding:2px 10px;margin-right:8px;
+    font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;
+  }
+
+  /* ---------- HEADER ---------- */
+  header{padding:36px 0 8px;position:relative;z-index:2;}
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--indigo-dark);
+  }
+  .brand .logo{
+    width:30px;height:30px;border-radius:9px;
+    background:linear-gradient(135deg,var(--indigo),var(--violet));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:14px;font-weight:800;box-shadow:0 4px 14px -4px rgba(79,70,229,.55);
+  }
+
+  /* ---------- HERO ---------- */
+  .hero-outer{position:relative;overflow:hidden;}
+  .blob{
+    position:absolute;border-radius:50%;filter:blur(60px);opacity:.35;z-index:0;pointer-events:none;
+  }
+  .blob1{width:360px;height:360px;background:var(--violet);top:-140px;right:-100px;}
+  .blob2{width:280px;height:280px;background:var(--pink);top:120px;left:-120px;opacity:.25;}
+
+  .hero{padding:28px 0 40px;position:relative;z-index:2;}
+  .hero h1{font-size:40px;line-height:1.14;margin:0 0 14px;font-weight:800;}
+  .hero h1 .accent{
+    background:linear-gradient(90deg,var(--indigo),var(--violet));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.lead{
+    color:var(--gray);font-size:17px;line-height:1.6;max-width:600px;margin:0 0 26px;
+  }
+  .chip-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;font-weight:600;color:var(--indigo-dark);
+    background:#fff;border:1.5px solid #ddd8fb;
+    padding:8px 14px 8px 10px;border-radius:999px;
+    box-shadow:0 2px 10px -6px rgba(79,70,229,.3);
+  }
+  .chip svg{flex:0 0 auto;}
+
+  /* ---------- SECTION HEADERS ---------- */
+  .section{padding:48px 0 8px;position:relative;z-index:2;}
+  .section h2{font-size:25px;margin:0 0 8px;font-weight:800;}
+  .section .section-sub{
+    color:var(--gray);font-size:14.5px;margin:0 0 28px;max-width:620px;line-height:1.65;
+  }
+
+  /* ---------- CARDS GRID ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;}
+  .card{
+    border:1.5px solid var(--gray-light);border-radius:18px;
+    padding:26px 22px;display:flex;flex-direction:column;
+    background:#fff;position:relative;
+    box-shadow:0 4px 18px -14px rgba(22,19,39,.25);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:0 14px 30px -16px rgba(79,70,229,.35);}
+  .card.destacado{
+    border-color:transparent;color:#fff;
+    background:linear-gradient(160deg,var(--indigo) 0%,var(--indigo-dark) 65%,var(--violet) 130%);
+    box-shadow:0 16px 40px -14px rgba(79,70,229,.6);
+  }
+  .card.destacado .desc{color:rgba(255,255,255,.82);}
+  .card.destacado .precio{color:#fff;}
+  .card.destacado .precio small{color:rgba(255,255,255,.75);}
+  .badge{
+    position:absolute;top:-12px;right:18px;
+    background:linear-gradient(90deg,var(--gold),#fbbf24);color:#3a2a00;font-size:11px;font-weight:800;
+    padding:5px 13px;border-radius:999px;letter-spacing:.02em;box-shadow:0 4px 12px -4px rgba(245,158,11,.6);
+  }
+  .card .nombre{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+  .card.destacado .nombre{color:#fff;}
+  .card .precio{font-size:27px;font-weight:800;color:var(--indigo-dark);letter-spacing:-.01em;line-height:1.15;margin-bottom:4px;}
+  .card .precio small{font-size:12.5px;font-weight:600;color:var(--gray);display:block;margin-top:2px;}
+  .card .desc{font-size:13.5px;color:var(--gray);line-height:1.55;margin:8px 0 22px;flex:1;}
+  .card button.btn{
+    display:block;width:100%;text-align:center;text-decoration:none;border:none;
+    background:linear-gradient(90deg,var(--indigo),var(--indigo-dark));color:#fff;font-weight:700;font-size:14.5px;
+    padding:13px 16px;border-radius:11px;transition:filter .15s ease, transform .1s ease;
+  }
+  .card button.btn:hover{filter:brightness(1.08);}
+  .card button.btn:active{transform:scale(.98);}
+  .card.destacado button.btn{background:#fff;color:var(--indigo-dark);}
+  .card.destacado button.btn:hover{background:#f3f0ff;}
+
+  /* ---------- INCLUYE ---------- */
+  .incluye{
+    margin-top:56px;
+    background:linear-gradient(160deg,#ffffff, var(--indigo-soft));
+    border:1.5px solid var(--gray-light);border-radius:20px;
+    padding:30px 30px 26px;
+  }
+  .incluye h3{font-size:17px;margin:0 0 18px;font-weight:800;}
+  .incluye ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px 22px;}
+  .incluye li{display:flex;gap:10px;align-items:flex-start;color:#3a3560;font-size:14px;line-height:1.55;}
+  .incluye li svg{flex:0 0 auto;margin-top:2px;}
+  .incluye li strong{color:var(--ink);}
+
+  footer{
+    margin-top:60px;padding:30px 0 60px;border-top:1px solid var(--gray-light);
+    color:var(--gray);font-size:12.5px;text-align:center;line-height:1.6;position:relative;z-index:2;
+  }
+
+  @media (max-width:520px){
+    .hero h1{font-size:31px;}
+    .blob1,.blob2{display:none;}
+  }
+
+  /* ---------- MODAL CONFIRMACIÓN DE PLAN ---------- */
+  #modalOverlay{
+    display:none;position:fixed;inset:0;background:rgba(22,19,39,.6);z-index:80;
+    align-items:flex-start;justify-content:center;padding:32px 16px;overflow-y:auto;
+    backdrop-filter:blur(2px);
+  }
+  #modalOverlay.activo{display:flex;}
+  .modalBox{
+    background:#fff;border-radius:20px;padding:30px 28px 26px;max-width:440px;width:100%;
+    box-shadow:0 30px 70px -24px rgba(22,19,39,.45);
+    border:1px solid var(--gray-light);
+  }
+  .modalBox .modalPlan{font-size:12.5px;font-weight:700;color:var(--indigo);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
+  .modalBox h3{font-size:21px;margin:0 0 4px;font-weight:800;}
+  .modalBox .modalPrecio{font-size:14.5px;color:var(--gray);margin-bottom:18px;}
+  .modalBox label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 6px;}
+  .modalBox input[type=text],.modalBox input[type=email]{
+    width:100%;border:1.5px solid var(--gray-light);border-radius:10px;
+    padding:11px 12px;font-size:14.5px;font-family:inherit;
+  }
+  .modalBox input[type=text]:focus,.modalBox input[type=email]:focus{outline:none;border-color:var(--indigo);}
+  .modulosFijos{
+    background:var(--indigo-soft);border:1px solid #ddd8fb;border-radius:10px;
+    padding:12px 14px;font-size:13.5px;color:var(--indigo-dark);line-height:1.6;margin-top:6px;
+  }
+  .contador{font-size:12.5px;color:var(--gray);font-weight:600;margin-bottom:8px;}
+  .contador.completo{color:var(--green);}
+  .checkGrid{display:flex;flex-direction:column;gap:8px;}
+  .checkItem{
+    display:flex;align-items:center;gap:10px;border:1.5px solid var(--gray-light);border-radius:10px;
+    padding:9px 12px;font-size:14px;
+  }
+  .checkItem input{width:16px;height:16px;flex:0 0 auto;}
+  .checkItem.deshabilitado{opacity:.4;}
+  .errorTxt{color:var(--red);font-size:12.5px;margin-top:14px;display:none;}
+  .errorTxt.activo{display:block;}
+  .modalBtns{display:flex;gap:10px;margin-top:22px;}
+  .modalBtns button{
+    flex:1;border-radius:11px;padding:12px;font-size:14.5px;font-weight:700;border:none;
+  }
+  #modalCancelar{background:#f3f1fb;color:var(--ink);}
+  #modalConfirmar{background:linear-gradient(90deg,var(--indigo),var(--indigo-dark));color:#fff;}
+  #modalConfirmar:hover{filter:brightness(1.08);}
+  .modalNota{font-size:12px;color:var(--gray);margin-top:14px;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<div class="urgency"><span class="tag">Precio de lanzamiento</span>Válido para las primeras inscripciones de PAES Karuy — asegura tu plan ahora</div>
+
+<div class="hero-outer">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand"><span class="logo">K</span>PAES KARUY</div>
+    </header>
+
+    <section class="hero">
+      <h1>Elige tu plan de<br><span class="accent">preparación PAES 2027</span></h1>
+      <p class="lead">Arma tu combinación de módulos a tu ritmo, con acceso único hasta la fecha de rendición de la PAES. Sin mensualidades.</p>
+      <div class="chip-row">
+        <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Tutor IA 24/7 por módulo</span>
+        <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Contenido validado por profesores</span>
+        <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Acceso único, sin mensualidades</span>
+        <span class="chip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M20 6 9 17l-5-5"/></svg>Ensayos PAES incluidos</span>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="section">
+    <h2>Escalera por cantidad de módulos</h2>
+    <p class="section-sub">Elige libremente cuántos módulos quieres — Lenguaje, Matemática M1, Matemática M2, Ciencias (Biología, Física o Química) o Historia — el precio se ajusta según la cantidad, no según cuáles elijas. Deja tu correo, paga, y después coordinamos por WhatsApp cuáles módulos eliges.</p>
+    <div class="grid">
+
+      <div class="card">
+        <div class="nombre">Módulo individual</div>
+        <div class="precio">$34.990</div>
+        <div class="desc">1 módulo a elección.</div>
+        <button class="btn" type="button" data-plan="Módulo individual" data-precio="$34.990" data-webpay="https://www.webpay.cl/form-pay/414544" data-n="1">Elegir este plan</button>
+      </div>
+
+      <div class="card">
+        <div class="nombre">2 módulos</div>
+        <div class="precio">$59.990</div>
+        <div class="desc">Combinación libre de 2 módulos.</div>
+        <button class="btn" type="button" data-plan="2 módulos" data-precio="$59.990" data-webpay="https://www.webpay.cl/form-pay/414548" data-n="2">Elegir este plan</button>
+      </div>
+
+      <div class="card">
+        <div class="nombre">3 módulos</div>
+        <div class="precio">$84.990</div>
+        <div class="desc">Combinación libre de 3 módulos.</div>
+        <button class="btn" type="button" data-plan="3 módulos" data-precio="$84.990" data-webpay="https://www.webpay.cl/form-pay/414549" data-n="3">Elegir este plan</button>
+      </div>
+
+      <div class="card">
+        <div class="nombre">4 módulos</div>
+        <div class="precio">$109.990</div>
+        <div class="desc">Combinación libre de 4 módulos.</div>
+        <button class="btn" type="button" data-plan="4 módulos" data-precio="$109.990" data-webpay="https://www.webpay.cl/form-pay/414553" data-n="4">Elegir este plan</button>
+      </div>
+
+      <div class="card destacado">
+        <span class="badge">★ Todo incluido</span>
+        <div class="nombre">Pack completo</div>
+        <div class="precio">$189.990 <small>hasta $199.990</small></div>
+        <div class="desc">Los 8 módulos: Lenguaje, Matemática M1 y M2, Ciencias Plan Común, Biología, Física, Química e Historia.</div>
+        <button class="btn" type="button" data-plan="Pack completo" data-precio="$189.990 – $199.990" data-webpay="https://www.webpay.cl/form-pay/414555" data-n="0" data-modulos="Lenguaje, Matemática M1, Matemática M2, Ciencias Plan Común, Biología, Física, Química, Historia">Elegir este plan</button>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>Packs sugeridos por carrera</h2>
+    <p class="section-sub">Mismo precio que la escalera según la cantidad de módulos, pero ya armados según el perfil vocacional más común para cada carrera.</p>
+    <div class="grid">
+
+      <div class="card">
+        <div class="nombre">Pack Medicina / Salud</div>
+        <div class="precio">$109.990</div>
+        <div class="desc">Matemática M1 + Lenguaje + Biología + Química.</div>
+        <button class="btn" type="button" data-plan="Pack Medicina / Salud" data-precio="$109.990" data-webpay="https://www.webpay.cl/form-pay/414559" data-n="0" data-modulos="Matemática M1, Lenguaje, Biología, Química">Elegir este plan</button>
+      </div>
+
+      <div class="card">
+        <div class="nombre">Pack Ingeniería</div>
+        <div class="precio">$109.990</div>
+        <div class="desc">Matemática M1 + Matemática M2 + Física + Lenguaje.</div>
+        <button class="btn" type="button" data-plan="Pack Ingeniería" data-precio="$109.990" data-webpay="https://www.webpay.cl/form-pay/414560" data-n="0" data-modulos="Matemática M1, Matemática M2, Física, Lenguaje">Elegir este plan</button>
+      </div>
+
+      <div class="card">
+        <div class="nombre">Pack Derecho / Cs. Sociales</div>
+        <div class="precio">$84.990</div>
+        <div class="desc">Lenguaje + Historia + Matemática M1.</div>
+        <button class="btn" type="button" data-plan="Pack Derecho / Cs. Sociales" data-precio="$84.990" data-webpay="https://www.webpay.cl/form-pay/414562" data-n="0" data-modulos="Lenguaje, Historia, Matemática M1">Elegir este plan</button>
+      </div>
+
+      <div class="card">
+        <div class="nombre">Pack Pedagogía</div>
+        <div class="precio">$84.990</div>
+        <div class="desc">Lenguaje + Historia + Matemática M1.</div>
+        <button class="btn" type="button" data-plan="Pack Pedagogía" data-precio="$84.990" data-webpay="https://www.webpay.cl/form-pay/414565" data-n="0" data-modulos="Lenguaje, Historia, Matemática M1">Elegir este plan</button>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="incluye">
+    <h3>¿Qué incluye cada plan?</h3>
+    <ul>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10" opacity=".15" fill="#4f46e5" stroke="none"/><path d="M8 12.5l2.5 2.5L16 9"/></svg><span><strong>Tutor con IA 24/7</strong> dentro de cada módulo, con método socrático y generación infinita de preguntas de refuerzo.</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10" opacity=".15" fill="#4f46e5" stroke="none"/><path d="M8 12.5l2.5 2.5L16 9"/></svg><span><strong>Ensayos PAES incluidos</strong> según la cantidad de materias que compres: 1 materia → 1 ensayo, 2 materias → 2 ensayos, 3 materias → 3 ensayos, y 4 o más materias → acceso a todos los ensayos disponibles.</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10" opacity=".15" fill="#4f46e5" stroke="none"/><path d="M8 12.5l2.5 2.5L16 9"/></svg><span><strong>Contenido validado por profesores</strong> especialistas de cada asignatura antes de publicarse.</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10" opacity=".15" fill="#4f46e5" stroke="none"/><path d="M8 12.5l2.5 2.5L16 9"/></svg><span><strong>Acceso único</strong> hasta la fecha de rendición de la PAES — sin mensualidades ni suscripciones.</span></li>
+    </ul>
+  </div>
+
+  <footer>
+    PAES Karuy · Preparación integral para la PAES Admisión 2027 · Precios en pesos chilenos (CLP)
+  </footer>
+
+</div>
+
+<!-- ================= MODAL CONFIRMACIÓN ================= -->
+<div id="modalOverlay">
+  <div class="modalBox">
+    <div class="modalPlan" id="modalPlanLbl">Plan</div>
+    <h3 id="modalPlanNombre">Nombre del plan</h3>
+    <div class="modalPrecio" id="modalPlanPrecio">$0</div>
+
+    <div id="modalModulosFijosWrap" style="display:none;">
+      <label>Este plan incluye</label>
+      <div class="modulosFijos" id="modalModulosFijos"></div>
+    </div>
+
+    <label for="modalCorreo">Tu correo</label>
+    <input type="email" id="modalCorreo" placeholder="tu@correo.cl">
+
+    <p class="errorTxt" id="modalError">Ingresa un correo válido.</p>
+
+    <div class="modalBtns">
+      <button id="modalCancelar" type="button">Cancelar</button>
+      <button id="modalConfirmar" type="button">Confirmar y pagar</button>
+    </div>
+    <p class="modalNota">Al confirmar se abre WhatsApp para avisarnos de tu compra y luego la página de pago en otra pestaña. Después del pago te contactamos para coordinar tus módulos y el acceso.</p>
+  </div>
+</div>
+
+<script>
+const WHATSAPP_NUMERO = '56969087302';
+
+let planActual = null;
+
+const overlay = document.getElementById('modalOverlay');
+const modalPlanLbl = document.getElementById('modalPlanLbl');
+const modalPlanNombre = document.getElementById('modalPlanNombre');
+const modalPlanPrecio = document.getElementById('modalPlanPrecio');
+const modalModulosFijosWrap = document.getElementById('modalModulosFijosWrap');
+const modalModulosFijos = document.getElementById('modalModulosFijos');
+const modalCorreo = document.getElementById('modalCorreo');
+const modalError = document.getElementById('modalError');
+
+document.querySelectorAll('.card button.btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    planActual = {
+      nombre: btn.dataset.plan,
+      precio: btn.dataset.precio,
+      webpay: btn.dataset.webpay,
+      n: parseInt(btn.dataset.n, 10),
+      modulosFijos: btn.dataset.modulos || ''
+    };
+    abrirModal();
+  });
+});
+
+function abrirModal(){
+  modalPlanLbl.textContent = 'Plan seleccionado';
+  modalPlanNombre.textContent = planActual.nombre;
+  modalPlanPrecio.textContent = planActual.precio;
+  modalCorreo.value = '';
+  modalError.classList.remove('activo');
+
+  if(planActual.modulosFijos){
+    modalModulosFijosWrap.style.display = 'block';
+    modalModulosFijos.textContent = planActual.modulosFijos;
+  } else {
+    modalModulosFijosWrap.style.display = 'none';
+  }
+
+  overlay.classList.add('activo');
+}
+
+document.getElementById('modalCancelar').addEventListener('click', ()=>{
+  overlay.classList.remove('activo');
+});
+
+document.getElementById('modalConfirmar').addEventListener('click', ()=>{
+  const correo = modalCorreo.value.trim();
+  const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+
+  if(!correoValido){
+    modalError.classList.add('activo');
+    return;
+  }
+  modalError.classList.remove('activo');
+
+  const modulosTexto = planActual.n > 0 ? 'Por confirmar después del pago' : planActual.modulosFijos;
+  const mensaje =
+    `Hola! Quiero confirmar mi compra en PAES Karuy.\n` +
+    `Plan: ${planActual.nombre} (${planActual.precio})\n` +
+    `Módulos: ${modulosTexto}\n` +
+    `Correo: ${correo}`;
+
+  const waUrl = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
+  window.open(waUrl, '_blank', 'noopener');
+
+  overlay.classList.remove('activo');
+  window.location.href = planActual.webpay;
+});
+
+overlay.addEventListener('click', (e)=>{
+  if(e.target === overlay) overlay.classList.remove('activo');
+});
+</script>
+
+</body>
+</html>
