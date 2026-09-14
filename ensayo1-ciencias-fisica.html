@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ensayo N°1 · Ciencias Física · PAES Karuy</title>
+<style>
+  :root{
+    --prim:#0891b2;
+    --prim-soft:#cffafe;
+    --prim-dark:#155e75;
+    --ink:#1a1a1a;
+    --gray:#6b7280;
+    --gray-light:#e5e7eb;
+    --bg:#ffffff;
+    --green:#16a34a;
+    --amber:#d97706;
+    --red:#dc2626;
+    --teal:#0d9488;
+    --violet:#7c3aed;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Georgia','Times New Roman',serif;
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  .sans{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  h1,h2,h3{font-family:'Georgia','Times New Roman',serif;}
+  button{font-family:inherit;cursor:pointer;}
+  ::selection{background:var(--prim-soft);}
+
+  /* ---------- PORTADA ---------- */
+  #portada{
+    max-width:640px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-weight:700;font-size:14px;letter-spacing:.04em;color:var(--prim);
+    text-transform:uppercase;margin-bottom:32px;
+  }
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--prim);}
+  #portada h1{font-size:32px;line-height:1.15;margin:0 0 6px;}
+  #portada .subt{color:var(--gray);font-size:16px;margin-bottom:28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  .meta-row{
+    display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px;
+  }
+  .meta-chip{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:13px;font-weight:600;color:var(--prim-dark);
+    background:var(--prim-soft);border:1px solid #c7d2fe;
+    padding:8px 14px;border-radius:999px;
+  }
+  .instrucciones{
+    background:#fafafa;border:1px solid var(--gray-light);border-radius:12px;
+    padding:24px 26px;margin-bottom:32px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .instrucciones h3{font-size:15px;margin:0 0 14px;color:var(--ink);}
+  .instrucciones ol{margin:0;padding-left:20px;color:#374151;font-size:14.5px;line-height:1.65;}
+  .instrucciones li{margin-bottom:8px;}
+  #btnComenzar{
+    width:100%;background:var(--prim);color:#fff;border:none;border-radius:10px;
+    padding:16px 20px;font-size:16px;font-weight:700;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    transition:background .15s ease;
+  }
+  #btnComenzar:hover{background:var(--prim-dark);}
+  .nota-ia{
+    text-align:center;margin-top:14px;font-size:12.5px;color:var(--gray);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+
+  /* ---------- EXAMEN (fondo blanco / letras negras, estilo oficial) ---------- */
+  #examen{display:none;background:#fff;min-height:100vh;}
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    background:#fff;border-bottom:2px solid var(--ink);
+    padding:10px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .topbar .titulo-mini{font-weight:700;font-size:14px;}
+  .topbar .progreso{font-size:13px;color:var(--gray);}
+  #timer{
+    font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;
+    padding:6px 14px;border:2px solid var(--ink);border-radius:8px;
+  }
+  #timer.alerta{color:var(--red);border-color:var(--red);}
+  .btnFinalizar{
+    background:var(--ink);color:#fff;border:none;border-radius:8px;
+    padding:9px 16px;font-size:13px;font-weight:700;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+
+  .tabsTextos{
+    display:flex;gap:0;border-bottom:1px solid var(--gray-light);
+    overflow-x:auto;background:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .tabTexto{
+    flex:0 0 auto;padding:12px 18px;font-size:13px;font-weight:600;color:var(--gray);
+    border-bottom:3px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;
+  }
+  .tabTexto.activo{color:var(--ink);border-bottom-color:var(--prim);}
+
+  .examLayout{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    max-width:1200px;margin:0 auto;
+    min-height:calc(100vh - 110px);
+  }
+  @media (max-width:860px){
+    .examLayout{grid-template-columns:1fr;}
+  }
+  .panelTexto{
+    padding:28px 32px;border-right:1px solid var(--gray-light);
+    max-height:calc(100vh - 110px);overflow-y:auto;
+  }
+  @media (max-width:860px){
+    .panelTexto{border-right:none;border-bottom:8px solid #f3f4f6;max-height:none;}
+  }
+  .panelTexto h2{font-size:20px;margin:0 0 4px;}
+  .panelTexto .tipoTexto{font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin-bottom:16px;display:block;}
+  .panelTexto p{font-size:16px;line-height:1.75;margin:0 0 16px;color:#111;}
+  .panelTexto .formulaBox{
+    background:var(--prim-soft);border:1px solid #c7d2fe;border-radius:10px;
+    padding:14px 16px;margin-bottom:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:14.5px;color:var(--prim-dark);line-height:1.6;
+  }
+
+  .panelPregunta{padding:28px 32px;}
+  .navPregunta{
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .navPregunta button{
+    background:#fff;border:1.5px solid var(--ink);border-radius:8px;
+    padding:7px 14px;font-size:13px;font-weight:600;
+  }
+  .navPregunta button:disabled{opacity:.3;cursor:not-allowed;}
+  .numPregunta{font-weight:700;font-size:13px;color:var(--gray);}
+  .enunciado{font-size:17px;line-height:1.6;margin:0 0 20px;font-weight:600;}
+  .opciones{display:flex;flex-direction:column;gap:10px;}
+  .opcion{
+    display:flex;align-items:flex-start;gap:12px;
+    border:1.5px solid var(--gray-light);border-radius:10px;
+    padding:13px 16px;font-size:15px;line-height:1.5;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:#fff;
+  }
+  .opcion:hover{border-color:var(--ink);}
+  .opcion.marcada{border-color:var(--prim);background:var(--prim-soft);}
+  .opcion .letra{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;
+  }
+  .opcion.marcada .letra{background:var(--prim);border-color:var(--prim);color:#fff;}
+
+  .palette{
+    margin-top:26px;padding-top:20px;border-top:1px solid var(--gray-light);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .palette .lbl{font-size:12px;color:var(--gray);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+  .paletteGrid{display:grid;grid-template-columns:repeat(11,1fr);gap:6px;}
+  .paletteBtn{
+    aspect-ratio:1;border:1.5px solid var(--gray-light);border-radius:6px;background:#fff;
+    font-size:11.5px;font-weight:700;color:var(--gray);
+  }
+  .paletteBtn.respondida{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .paletteBtn.activa{border-color:var(--prim);box-shadow:0 0 0 2px var(--prim-soft);}
+
+  /* ---------- RESULTADOS ---------- */
+  #resultados{display:none;max-width:760px;margin:0 auto;padding:48px 24px 100px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#fff 0%,#f8f8ff 100%);}
+  .scoreCard{
+    background:linear-gradient(135deg,#e0e7ff 0%,#c7d2fe 55%,#a5b4fc 100%);
+    border:1px solid #c7d2fe;border-radius:20px;
+    padding:36px 32px;text-align:center;margin-bottom:28px;
+    box-shadow:0 10px 30px -12px rgba(79,70,229,.35);
+  }
+  .scoreCard .big{font-size:56px;font-weight:800;color:var(--prim-dark);line-height:1;letter-spacing:-.02em;}
+  .scoreCard .sub{color:var(--prim-dark);font-size:14px;margin-top:8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+  .habBlock{margin-bottom:28px;}
+  .habBlock h3{font-size:15px;margin:0 0 14px;color:var(--ink);}
+  .habRow{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .habRow .dotHab{width:11px;height:11px;border-radius:50%;flex:0 0 auto;}
+  .habRow .nom{width:140px;flex:0 0 auto;font-size:13.5px;font-weight:700;}
+  .habRow .barBg{flex:1;height:14px;background:#f3f4f6;border-radius:99px;overflow:hidden;}
+  .habRow .barFill{height:100%;border-radius:99px;transition:width .6s ease;}
+  .habRow .pct{width:44px;flex:0 0 auto;text-align:right;font-size:13.5px;font-weight:800;color:var(--ink);}
+
+  .diagnostico{
+    background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;
+    padding:22px 24px;margin-bottom:28px;font-size:14.5px;line-height:1.65;color:#374151;
+  }
+  .diagnostico strong{color:var(--prim-dark);}
+
+  .ctaBox{
+    background:linear-gradient(135deg,#4338ca 0%,#4f46e5 45%,#818cf8 100%);
+    border-radius:18px;padding:30px 28px;text-align:center;margin-bottom:24px;
+    box-shadow:0 14px 34px -14px rgba(67,56,202,.55);
+  }
+  .ctaBox p{color:#eef2ff;font-size:14.5px;margin:0 0 18px;font-weight:600;}
+  .ctaBox a{
+    display:inline-block;background:#fff;color:var(--prim-dark);text-decoration:none;
+    padding:15px 32px;border-radius:12px;font-weight:800;font-size:15.5px;
+    box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .15s ease;
+  }
+  .ctaBox a:hover{transform:translateY(-2px);}
+
+  #btnRevisar{
+    width:100%;background:#fff;border:1.5px solid var(--ink);color:var(--ink);
+    border-radius:10px;padding:13px;font-weight:700;font-size:14.5px;margin-bottom:6px;
+  }
+
+  /* ---------- MODAL CONFIRMACION ---------- */
+  #modalOverlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;
+    align-items:center;justify-content:center;padding:20px;
+  }
+  #modalOverlay.activo{display:flex;}
+  .modalBox{
+    background:#fff;border-radius:14px;padding:26px 26px 20px;max-width:380px;width:100%;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .modalBox p{font-size:14.5px;line-height:1.55;color:#374151;margin:0 0 20px;}
+  .modalBtns{display:flex;gap:10px;}
+  .modalBtns button{
+    flex:1;border-radius:8px;padding:11px;font-size:14px;font-weight:700;border:none;
+  }
+  #modalCancelar{background:#f3f4f6;color:var(--ink);}
+  #modalConfirmar{background:var(--prim);color:#fff;}
+
+  #revision{display:none;margin-top:28px;}
+  .revQ{border:1px solid var(--gray-light);border-radius:10px;padding:18px 20px;margin-bottom:14px;}
+  .revQ .revEnun{font-weight:700;font-size:14.5px;margin-bottom:10px;font-family:Georgia,serif;}
+  .revOpt{font-size:13.5px;padding:8px 10px;border-radius:6px;margin-bottom:6px;line-height:1.5;}
+  .revOpt.correcta{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;}
+  .revOpt.marcadaIncorrecta{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;}
+  .revOpt.neutra{background:#fafafa;border:1px solid #f0f0f0;color:#4b5563;}
+  .revHab{display:inline-block;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;margin-bottom:10px;}
+
+  .footerNota{text-align:center;font-size:12px;color:var(--gray);margin-top:20px;}
+</style>
+</head>
+<body>
+
+<!-- ================= PORTADA ================= -->
+<div id="portada">
+  <div class="brand"><span class="dot"></span>PAES KARUY</div>
+  <h1>Ensayo N°1 · Ciencias Física</h1>
+  <p class="subt">Módulo Común + Módulo Electivo de Física · versión reducida, aprox. mitad de la prueba oficial de Ciencias.</p>
+
+  <div class="meta-row">
+    <span class="meta-chip">36 preguntas</span>
+    <span class="meta-chip">Módulo Común (24) + Electivo Física (12)</span>
+    <span class="meta-chip">1 hora 15 minutos</span>
+    <span class="meta-chip">Sin descuento por error</span>
+  </div>
+
+  <div class="instrucciones">
+    <h3>Instrucciones</h3>
+    <ol>
+      <li>Esta prueba contiene 36 preguntas de selección múltiple con 4 opciones (A, B, C y D), de las cuales solo una es correcta.</li>
+      <li>Las primeras 24 preguntas corresponden al <strong>Módulo Común</strong> (mezcla de Biología, Física y Química) y las últimas 12 al <strong>Módulo Electivo de Física</strong>, igual que la estructura real de la prueba de Ciencias PAES.</li>
+      <li>Dispones de 1 hora y 15 minutos para responder. El cronómetro corre automáticamente y no se puede pausar.</li>
+      <li>No se descuenta puntaje por respuestas erradas, así que te conviene responder todas las preguntas.</li>
+      <li>Puedes moverte libremente entre las áreas temáticas y sus preguntas usando el panel numerado. Cada área muestra un breve apoyo conceptual, igual que en la prueba real.</li>
+      <li>Al finalizar (o cuando se acabe el tiempo), verás tu puntaje, un desglose por habilidad científica y una recomendación de estudio personalizada.</li>
+      <li>El tutor IA está desactivado durante esta rendición, igual que en la prueba real.</li>
+    </ol>
+  </div>
+
+  <button id="btnComenzar">Comenzar ensayo</button>
+  <p class="nota-ia">Material de práctica PAES Karuy · No reproduce contenido oficial DEMRE</p>
+</div>
+
+<!-- ================= EXAMEN ================= -->
+<div id="examen">
+  <div class="topbar">
+    <div class="titulo-mini">Ensayo N°1 · Ciencias Física</div>
+    <div class="progreso" id="progresoTxt">Pregunta 1 de 36</div>
+    <div id="timer">1:15:00</div>
+    <button class="btnFinalizar" id="btnFinalizar">Finalizar prueba</button>
+  </div>
+  <div class="tabsTextos" id="tabsTextos"></div>
+  <div class="examLayout">
+    <div class="panelTexto" id="panelTexto"></div>
+    <div class="panelPregunta">
+      <div class="navPregunta">
+        <button id="btnPrev">← Anterior</button>
+        <span class="numPregunta" id="numPreguntaLbl"></span>
+        <button id="btnNext">Siguiente →</button>
+      </div>
+      <p class="enunciado" id="enunciadoTxt"></p>
+      <div class="opciones" id="opcionesCont"></div>
+      <div class="palette">
+        <div class="lbl">Ir a pregunta</div>
+        <div class="paletteGrid" id="paletteGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RESULTADOS ================= -->
+<div id="resultados">
+  <div class="scoreCard">
+    <div class="big" id="scoreBig">0/36</div>
+    <div class="sub" id="scorePct">0% de logro</div>
+  </div>
+
+  <div class="habBlock">
+    <h3>Desglose por habilidad científica</h3>
+    <div id="habRows"></div>
+  </div>
+
+  <div class="diagnostico" id="diagnosticoTxt"></div>
+
+  <div class="ctaBox">
+    <p id="ctaTexto">Según tu resultado, te recomendamos un plan de estudio.</p>
+    <a href="#" target="_blank">Ver planes PAES Karuy</a>
+  </div>
+
+  <button id="btnRevisar">Revisar respuestas y explicaciones</button>
+  <div id="revision"></div>
+
+  <p class="footerNota">PAES Karuy · Ensayo de práctica · No reproduce contenido oficial DEMRE</p>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div id="modalOverlay">
+  <div class="modalBox">
+    <p id="modalTexto">¿Seguro que quieres finalizar la prueba?</p>
+    <div class="modalBtns">
+      <button id="modalCancelar">Cancelar</button>
+      <button id="modalConfirmar">Finalizar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ DATOS: MÓDULO COMÚN + MÓDULO ELECTIVO (con apoyo conceptual, no son "textos de lectura") ============
+const TEXTS = [
+  {
+    "id": 1,
+    "tipo": "Módulo Común · Eje Biología",
+    "titulo": "Biología",
+    "contenido": "El Módulo Común integra preguntas de Biología, Física y Química con un nivel de exigencia transversal.\nEn este eje se evalúan células y sus estructuras, sistema nervioso, reproducción, herencia, evolución y relación organismo-ambiente."
+  },
+  {
+    "id": 2,
+    "tipo": "Módulo Común · Eje Física",
+    "titulo": "Física",
+    "contenido": "En este eje se evalúan ondas, mecánica (movimiento y fuerzas), energía-Tierra (geosfera) y electricidad, con foco conceptual más que en cálculo extenso.\nFórmulas de apoyo: v=d/t; F=m·a; V=I·R."
+  },
+  {
+    "id": 3,
+    "tipo": "Módulo Común · Eje Química",
+    "titulo": "Química",
+    "contenido": "En este eje se evalúan estructura atómica, clasificación de la materia, química orgánica y reacciones químicas con estequiometría básica.\nRecuerda: n(mol)=masa/masa molar; concentración molar=mol de soluto/L de solución."
+  },
+  {
+    "id": 4,
+    "tipo": "Módulo Electivo Física",
+    "titulo": "Ondas",
+    "contenido": "Área centrada en elementos de las ondas electromagnéticas, reflexión, refracción, difracción, efecto Doppler, espectro electromagnético y formación de imágenes en espejos y lentes."
+  },
+  {
+    "id": 5,
+    "tipo": "Módulo Electivo Física",
+    "titulo": "Mecánica",
+    "contenido": "Área centrada en MRU y MRUA, leyes de Newton, trabajo y energía, diagrama de cuerpo libre y modelos cosmológicos (geocéntrico, heliocéntrico)."
+  },
+  {
+    "id": 6,
+    "tipo": "Módulo Electivo Física",
+    "titulo": "Energía – Tierra",
+    "contenido": "Área centrada en el modelo de capas de la Tierra (geosfera), tectónica de placas, actividad sísmica y volcánica, y fuentes de energía asociadas al interior terrestre."
+  },
+  {
+    "id": 7,
+    "tipo": "Módulo Electivo Física",
+    "titulo": "Electricidad",
+    "contenido": "Área centrada en ley de Ohm, circuitos serie/paralelo/mixto, potencia y energía eléctrica, y componentes de protección de la instalación eléctrica domiciliaria.\nFórmulas de apoyo: V=I·R; P=V·I."
+  }
+];
+
+const QUESTIONS = [
+  {
+    "id": 1,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "¿Cuál de las siguientes estructuras contiene la información genética de la célula y controla la síntesis de proteínas?",
+    "opciones": [
+      "Aparato de Golgi",
+      "Lisosoma",
+      "Núcleo celular",
+      "Retículo endoplasmático liso"
+    ],
+    "correcta": 2,
+    "expl": [
+      "El aparato de Golgi modifica y empaqueta proteínas, pero no almacena la información genética.",
+      "El lisosoma cumple función digestiva, degradando macromoléculas y desechos celulares.",
+      "El núcleo contiene el ADN y, a través de la transcripción, regula qué proteínas se sintetizan en la célula.",
+      "El retículo endoplasmático liso participa en la síntesis de lípidos, no en el almacenamiento del material genético."
+    ]
+  },
+  {
+    "id": 2,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Los anticuerpos producidos por el sistema inmune actúan principalmente:",
+    "opciones": [
+      "Reconociendo y uniéndose de forma específica a antígenos para neutralizarlos o marcarlos",
+      "Destruyendo directamente cualquier célula del propio organismo",
+      "Generando anticuerpos nuevos exclusivamente durante el sueño",
+      "Reemplazando la función de los glóbulos rojos en el transporte de oxígeno"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Cada anticuerpo reconoce un antígeno específico y se une a él, facilitando su neutralización o su eliminación por otras células inmunes.",
+      "Los anticuerpos no atacan indiscriminadamente células propias; su acción es específica contra antígenos reconocidos como extraños.",
+      "La producción de anticuerpos no depende del ciclo de sueño-vigilia, sino de la exposición a antígenos.",
+      "El transporte de oxígeno es función de la hemoglobina en los glóbulos rojos, no de los anticuerpos."
+    ]
+  },
+  {
+    "id": 3,
+    "textId": 1,
+    "habilidad": "Investigación científica",
+    "enunciado": "A diferencia de los métodos de barrera, el dispositivo intrauterino (DIU) de cobre previene el embarazo principalmente porque:",
+    "opciones": [
+      "Impide físicamente el paso de espermatozoides hacia las trompas de Falopio en todos los casos",
+      "Suprime por completo la ovulación mediante liberación hormonal",
+      "Elimina los óvulos ya formados en los ovarios",
+      "El cobre genera un ambiente uterino que interfiere con la movilidad espermática y la fecundación"
+    ],
+    "correcta": 3,
+    "expl": [
+      "El DIU no forma una barrera física que bloquee completamente el paso de espermatozoides, como sí lo hace un método de barrera.",
+      "El DIU de cobre no es hormonal, por lo que no actúa suprimiendo la ovulación como los métodos hormonales.",
+      "El DIU no elimina óvulos almacenados en el ovario; actúa a nivel del ambiente uterino y la fecundación.",
+      "El cobre libera iones que alteran la movilidad de los espermatozoides y el ambiente uterino, dificultando la fecundación."
+    ]
+  },
+  {
+    "id": 4,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Durante la anafase de la mitosis ocurre principalmente:",
+    "opciones": [
+      "La condensación inicial de los cromosomas",
+      "El alineamiento de los cromosomas en el plano ecuatorial",
+      "La separación de las cromátidas hermanas hacia polos opuestos de la célula",
+      "La formación de dos núcleos hijos independientes"
+    ],
+    "correcta": 2,
+    "expl": [
+      "La condensación de los cromosomas es característica de la profase, no de la anafase.",
+      "El alineamiento en el plano ecuatorial ocurre durante la metafase.",
+      "En la anafase, las fibras del huso separan las cromátidas hermanas y las desplazan hacia polos opuestos.",
+      "La formación de dos núcleos hijos corresponde a la telofase, etapa posterior a la anafase."
+    ]
+  },
+  {
+    "id": 5,
+    "textId": 1,
+    "habilidad": "Investigación científica",
+    "enunciado": "El aumento de bacterias resistentes a antibióticos en poblaciones expuestas repetidamente a estos fármacos es un ejemplo de:",
+    "opciones": [
+      "Mutación dirigida, en que el antibiótico induce directamente la resistencia en cada bacteria",
+      "Un fenómeno sin relación con la variabilidad genética de la población bacteriana",
+      "Herencia de caracteres adquiridos durante la vida de cada bacteria",
+      "Selección natural, donde el antibiótico favorece la sobrevivencia y reproducción de variantes ya resistentes"
+    ],
+    "correcta": 3,
+    "expl": [
+      "El antibiótico no genera la mutación de forma dirigida; actúa como agente selectivo sobre variantes ya existentes.",
+      "La resistencia depende justamente de la variabilidad genética previa dentro de la población bacteriana.",
+      "Este fenómeno no corresponde a la herencia de caracteres adquiridos, sino a la selección de variantes genéticas ya presentes en la población.",
+      "El antibiótico elimina a las bacterias sensibles y deja proliferar a las variantes resistentes preexistentes, un caso clásico de selección natural."
+    ]
+  },
+  {
+    "id": 6,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "La glucólisis, primera etapa de la degradación de la glucosa en la respiración celular, ocurre en:",
+    "opciones": [
+      "La matriz mitocondrial",
+      "El citoplasma",
+      "La membrana interna de la mitocondria",
+      "El núcleo celular"
+    ],
+    "correcta": 1,
+    "expl": [
+      "La matriz mitocondrial es el sitio del ciclo de Krebs, etapa posterior a la glucólisis.",
+      "La glucólisis ocurre en el citoplasma, antes de que el piruvato ingrese a la mitocondria.",
+      "La membrana interna mitocondrial alberga la cadena de transporte de electrones, no la glucólisis.",
+      "El núcleo celular no participa en las reacciones de degradación de la glucosa."
+    ]
+  },
+  {
+    "id": 7,
+    "textId": 1,
+    "habilidad": "Análisis de datos",
+    "enunciado": "En un cultivo bacteriano expuesto a un antibiótico, se observa que la población disminuye fuertemente en las primeras horas, pero luego se estabiliza en un número bajo y constante de bacterias. ¿Qué explicación es más consistente con este resultado?",
+    "opciones": [
+      "Todas las bacterias fueron eliminadas por el antibiótico",
+      "El antibiótico dejó de tener cualquier efecto sobre la población desde el inicio",
+      "Sobrevivió una fracción de bacterias resistentes que continúa reproduciéndose pese al antibiótico",
+      "La disminución inicial se debió únicamente a la falta de nutrientes en el medio de cultivo"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Si todas hubiesen sido eliminadas, la población llegaría a cero y no se estabilizaría en un número constante.",
+      "La fuerte disminución inicial muestra que el antibiótico sí tuvo efecto sobre la mayoría de la población.",
+      "La estabilización en un número bajo sugiere que un grupo resistente sobrevivió y mantiene su población pese al antibiótico.",
+      "El escenario describe exposición a un antibiótico, por lo que la explicación más consistente involucra ese factor, no solo la disponibilidad de nutrientes."
+    ]
+  },
+  {
+    "id": 8,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Los organismos descomponedores cumplen un rol clave en los ecosistemas porque:",
+    "opciones": [
+      "Producen materia orgánica a partir de luz solar",
+      "Convierten la energía solar directamente en energía química",
+      "Degradan materia orgánica muerta y liberan nutrientes reutilizables por otros organismos",
+      "Consumen exclusivamente productores vivos"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Producir materia orgánica a partir de luz solar es función de los organismos autótrofos fotosintéticos, no de los descomponedores.",
+      "La conversión de energía solar en energía química corresponde a la fotosíntesis, proceso ajeno a los descomponedores.",
+      "Los descomponedores degradan restos orgánicos y liberan nutrientes inorgánicos al ambiente, cerrando el ciclo de la materia.",
+      "Los descomponedores actúan sobre materia orgánica muerta, no sobre productores vivos."
+    ]
+  },
+  {
+    "id": 9,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "La reflexión total interna, principio de funcionamiento de la fibra óptica, ocurre cuando:",
+    "opciones": [
+      "Un rayo de luz incide sobre un ángulo mayor al ángulo crítico al pasar de un medio más denso a uno menos denso",
+      "Un rayo de luz pasa de un medio menos denso a uno más denso con cualquier ángulo de incidencia",
+      "La luz cambia de color al atravesar un medio transparente",
+      "Un rayo de luz se absorbe completamente al llegar a una superficie opaca"
+    ],
+    "correcta": 0,
+    "expl": [
+      "La reflexión total interna ocurre cuando la luz viaja de un medio más denso a uno menos denso con un ángulo de incidencia superior al ángulo crítico, reflejándose por completo.",
+      "Al pasar a un medio más denso la luz se acerca a la normal, pero no se produce reflexión total interna en ese sentido.",
+      "El cambio de color no está determinado por la reflexión total interna, sino por la longitud de onda de la luz.",
+      "La absorción total en una superficie opaca es un fenómeno distinto, no relacionado con el paso entre medios transparentes."
+    ]
+  },
+  {
+    "id": 10,
+    "textId": 2,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un cuerpo parte del reposo y se mueve con aceleración constante de 3 m/s². ¿Qué distancia recorre en los primeros 4 segundos?",
+    "opciones": [
+      "12 m",
+      "7 m",
+      "48 m",
+      "24 m"
+    ],
+    "correcta": 3,
+    "expl": [
+      "Ese valor corresponde a multiplicar solo la aceleración por el tiempo (v final), no a la distancia recorrida.",
+      "Ese valor corresponde a sumar aceleración y tiempo, operación que no calcula una distancia.",
+      "Ese valor duplica incorrectamente el resultado que se obtiene al aplicar d=½·a·t².",
+      "Con d=½·a·t²=½×3×16=24 m, considerando que el cuerpo parte del reposo."
+    ]
+  },
+  {
+    "id": 11,
+    "textId": 2,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Según la segunda ley de Newton, ¿qué fuerza neta se requiere para acelerar un cuerpo de 6 kg a razón de 2,5 m/s²?",
+    "opciones": [
+      "8,5 N",
+      "15 N",
+      "12,5 N",
+      "3,6 N"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Ese valor corresponde a sumar masa y aceleración, lo cual no representa una fuerza según F=m·a.",
+      "Según F=m·a=6×2,5=15 N.",
+      "Ese valor no coincide con el producto correcto entre la masa y la aceleración entregadas.",
+      "Ese valor resultaría de dividir masa por aceleración, operación que no calcula la fuerza neta."
+    ]
+  },
+  {
+    "id": 12,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Las ondas sísmicas P (primarias) se diferencian de las ondas S (secundarias) principalmente en que:",
+    "opciones": [
+      "Las ondas P son transversales y las S son longitudinales",
+      "Las ondas P viajan más rápido y pueden propagarse tanto en sólidos como en líquidos, a diferencia de las S",
+      "Las ondas S llegan siempre antes que las ondas P a un sismógrafo",
+      "Solo las ondas S son detectables por instrumentos científicos"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Es al revés: las ondas P son longitudinales y las ondas S son transversales.",
+      "Las ondas P son más rápidas y logran atravesar medios sólidos y líquidos, mientras que las ondas S solo se propagan en sólidos.",
+      "Por su mayor velocidad, las ondas P llegan siempre antes que las S a la estación sismográfica.",
+      "Ambos tipos de ondas son registrados por sismógrafos; la diferencia no está en su detectabilidad."
+    ]
+  },
+  {
+    "id": 13,
+    "textId": 2,
+    "habilidad": "Análisis de datos",
+    "enunciado": "En un circuito simple, una resistencia de 5 Ω es recorrida por una corriente de 3 A. Según la ley de Ohm, ¿cuál es el voltaje aplicado?",
+    "opciones": [
+      "15 V",
+      "8 V",
+      "1,7 V",
+      "0,6 V"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Según V=I·R=3×5=15 V.",
+      "Ese valor corresponde a sumar resistencia y corriente, lo cual no representa el voltaje según V=I·R.",
+      "Ese valor corresponde a dividir la corriente por la resistencia, operación que no calcula el voltaje.",
+      "Ese valor invierte la relación correcta entre corriente y resistencia."
+    ]
+  },
+  {
+    "id": 14,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El modelo geocéntrico de Ptolomeo explicaba el movimiento aparente retrógrado de los planetas mediante:",
+    "opciones": [
+      "Órbitas elípticas alrededor del Sol",
+      "La rotación diaria de la Tierra sobre su propio eje",
+      "El uso de epiciclos, círculos menores sobre los cuales se desplazaban los planetas",
+      "La atracción gravitacional entre los planetas y el Sol"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Las órbitas elípticas alrededor del Sol corresponden al modelo posterior de Kepler, no al de Ptolomeo.",
+      "La rotación terrestre no era el mecanismo que Ptolomeo usaba para explicar el movimiento retrógrado planetario.",
+      "Ptolomeo introdujo los epiciclos, trayectorias circulares secundarias, para explicar el movimiento retrógrado observado de los planetas dentro de su modelo geocéntrico.",
+      "La noción de atracción gravitacional entre cuerpos celestes fue formulada mucho después, por Newton."
+    ]
+  },
+  {
+    "id": 15,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El peso de un objeto se diferencia de su masa porque el peso:",
+    "opciones": [
+      "Corresponde a la fuerza gravitacional que actúa sobre el objeto y depende del campo gravitacional local",
+      "Es una propiedad de la materia que no varía según la ubicación del objeto",
+      "Se mide en kilogramos, igual que la masa",
+      "Es siempre igual en cualquier planeta o satélite del sistema solar"
+    ],
+    "correcta": 0,
+    "expl": [
+      "El peso es la fuerza con que la gravedad atrae al objeto, por lo que varía según la intensidad del campo gravitacional del lugar.",
+      "Esa característica corresponde a la masa, que es invariable frente al lugar donde se encuentre el objeto.",
+      "El peso se mide en newtons, unidad de fuerza, mientras que la masa se mide en kilogramos.",
+      "El peso cambia entre distintos cuerpos celestes debido a que la gravedad varía de uno a otro."
+    ]
+  },
+  {
+    "id": 16,
+    "textId": 2,
+    "habilidad": "Investigación científica",
+    "enunciado": "El análisis del espectro de luz emitido por una estrella permite a los astrónomos determinar principalmente:",
+    "opciones": [
+      "La distancia exacta a la estrella mediante el color de la luz",
+      "La composición química y algunas características físicas de la estrella, a partir de sus líneas espectrales",
+      "La edad exacta de la estrella sin necesidad de otros datos",
+      "El tamaño físico exacto de la estrella en kilómetros"
+    ],
+    "correcta": 1,
+    "expl": [
+      "La distancia se estima con otros métodos, como el paralaje, no directamente del color de la luz.",
+      "Las líneas de absorción y emisión del espectro revelan los elementos presentes en la estrella y otras propiedades físicas, como su temperatura.",
+      "La edad estelar se infiere combinando varios datos y modelos, no únicamente a partir del espectro.",
+      "El tamaño se estima combinando luminosidad y temperatura, no se obtiene de forma directa y exacta del espectro."
+    ]
+  },
+  {
+    "id": 17,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Un enlace químico formado por la transferencia de electrones desde un átomo metálico hacia uno no metálico corresponde a un enlace:",
+    "opciones": [
+      "Covalente polar",
+      "Iónico",
+      "Covalente no polar",
+      "Metálico"
+    ],
+    "correcta": 1,
+    "expl": [
+      "El enlace covalente polar implica compartir electrones de forma desigual, no transferirlos completamente.",
+      "El enlace iónico se forma por la transferencia completa de electrones de un átomo metálico a uno no metálico, generando iones de carga opuesta.",
+      "El enlace covalente no polar comparte electrones de manera equitativa entre átomos similares.",
+      "El enlace metálico ocurre entre átomos metálicos, con electrones deslocalizados, no por transferencia entre metal y no metal."
+    ]
+  },
+  {
+    "id": 18,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Según el modelo atómico de Bohr, los electrones:",
+    "opciones": [
+      "Se distribuyen en una nube de probabilidad sin órbitas definidas",
+      "No pueden cambiar de nivel de energía bajo ninguna circunstancia",
+      "Forman parte de un átomo indivisible y macizo",
+      "Giran en órbitas circulares de energía definida alrededor del núcleo"
+    ],
+    "correcta": 3,
+    "expl": [
+      "La idea de una nube de probabilidad corresponde al modelo cuántico-ondulatorio, posterior al de Bohr.",
+      "Los electrones sí pueden saltar entre niveles de energía al absorber o emitir energía, según el propio modelo de Bohr.",
+      "La idea de átomo indivisible y macizo corresponde al modelo de Dalton, no al de Bohr.",
+      "Bohr propuso que los electrones giran en órbitas circulares con niveles de energía específicos alrededor del núcleo."
+    ]
+  },
+  {
+    "id": 19,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El grupo funcional característico de los alcoholes, como el etanol, corresponde a:",
+    "opciones": [
+      "Grupo carboxilo (-COOH)",
+      "Grupo carbonilo (C=O)",
+      "Grupo amino (-NH₂)",
+      "Grupo hidroxilo (-OH)"
+    ],
+    "correcta": 3,
+    "expl": [
+      "El grupo carboxilo es característico de los ácidos carboxílicos, no de los alcoholes.",
+      "El grupo carbonilo es propio de aldehídos y cetonas, no define a los alcoholes.",
+      "El grupo amino es característico de las aminas, compuestos distintos de los alcoholes.",
+      "El grupo hidroxilo unido a un carbono saturado es el que define químicamente a los alcoholes."
+    ]
+  },
+  {
+    "id": 20,
+    "textId": 3,
+    "habilidad": "Análisis de datos",
+    "enunciado": "En la reacción balanceada CH₄ + 2O₂ → CO₂ + 2H₂O, ¿cuántos moles de O₂ se necesitan para reaccionar completamente con 3 moles de CH₄?",
+    "opciones": [
+      "3 moles",
+      "6 moles",
+      "1,5 moles",
+      "9 moles"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Ese valor no respeta la proporción 1:2 entre CH₄ y O₂ que indica la ecuación balanceada.",
+      "Según la proporción 1:2, 3 moles de CH₄ requieren 3×2=6 moles de O₂.",
+      "Ese valor resultaría de dividir en vez de multiplicar según la proporción estequiométrica correcta.",
+      "Ese valor sobreestima la cantidad de O₂ necesaria según la estequiometría de la reacción."
+    ]
+  },
+  {
+    "id": 21,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "La ley de las proporciones definidas, propuesta por Proust, establece que:",
+    "opciones": [
+      "Cualquier compuesto puede formarse combinando elementos en proporciones variables",
+      "Un compuesto químico siempre está formado por los mismos elementos en una proporción de masa fija",
+      "La masa se destruye parcialmente durante la formación de un compuesto",
+      "Los elementos solo pueden combinarse en proporciones enteras al azar"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Esta ley establece justamente lo contrario: las proporciones de masa en un compuesto son fijas, no variables.",
+      "Según Proust, un compuesto dado siempre contiene sus elementos constituyentes en una proporción de masa constante y definida.",
+      "La ley de las proporciones definidas no involucra pérdida de masa; se relaciona con la composición constante de los compuestos.",
+      "Las proporciones no son azarosas; corresponden a relaciones de masa fijas y características de cada compuesto."
+    ]
+  },
+  {
+    "id": 22,
+    "textId": 3,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Se tienen 500 mL de una solución con concentración 2 mol/L. ¿Cuántos moles de soluto contiene esa solución?",
+    "opciones": [
+      "1 mol",
+      "2,5 moles",
+      "0,25 moles",
+      "4 moles"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Moles de soluto = concentración × volumen(L) = 2 × 0,5 = 1 mol.",
+      "Ese valor no corresponde al producto correcto entre volumen y concentración con los datos entregados.",
+      "Ese valor resultaría de dividir incorrectamente la concentración por el volumen sin convertir unidades.",
+      "Ese valor duplica incorrectamente el resultado que se obtiene al aplicar la fórmula correspondiente."
+    ]
+  },
+  {
+    "id": 23,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Un catalizador aumenta la velocidad de una reacción química principalmente porque:",
+    "opciones": [
+      "Disminuye la energía de activación necesaria para que ocurra la reacción",
+      "Aumenta la concentración de los reactantes disponibles",
+      "Incrementa la temperatura del sistema de forma directa",
+      "Se consume completamente durante la reacción, aportando energía"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Un catalizador ofrece una vía alternativa con menor energía de activación, acelerando la reacción sin ser consumido.",
+      "El catalizador no altera la cantidad de reactantes presentes en el sistema.",
+      "El catalizador no actúa elevando la temperatura del sistema; su efecto es sobre la vía de reacción.",
+      "Por definición, un catalizador no se consume durante la reacción, sino que se regenera al final de esta."
+    ]
+  },
+  {
+    "id": 24,
+    "textId": 3,
+    "habilidad": "Investigación científica",
+    "enunciado": "La destilación fraccionada, utilizada para separar los componentes del petróleo crudo, se basa principalmente en:",
+    "opciones": [
+      "Las diferencias de solubilidad de los componentes en agua",
+      "El tamaño de las partículas sólidas suspendidas en la mezcla",
+      "Las diferencias en los puntos de ebullición de los distintos hidrocarburos presentes",
+      "La diferencia de color entre los distintos componentes de la mezcla"
+    ],
+    "correcta": 2,
+    "expl": [
+      "El petróleo es una mezcla de hidrocarburos poco solubles en agua; la solubilidad no es el criterio de separación aquí.",
+      "El petróleo crudo es una mezcla homogénea de líquidos, no contiene partículas sólidas en suspensión relevantes para este método.",
+      "Cada fracción del petróleo hierve a una temperatura distinta, lo que permite separarlas por destilación fraccionada según ese criterio.",
+      "El color de los componentes no es el fundamento físico que permite la separación por destilación."
+    ]
+  },
+  {
+    "id": 25,
+    "textId": 4,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El fenómeno por el cual una onda se curva al pasar a través de una abertura estrecha o bordea un obstáculo se denomina:",
+    "opciones": [
+      "Difracción",
+      "Refracción",
+      "Efecto Doppler",
+      "Polarización"
+    ],
+    "correcta": 0,
+    "expl": [
+      "La difracción corresponde a la capacidad de una onda de curvarse al atravesar una abertura o rodear un obstáculo.",
+      "La refracción es el cambio de dirección de una onda al pasar de un medio a otro con distinta densidad óptica.",
+      "El efecto Doppler es el cambio de frecuencia percibida por movimiento relativo entre fuente y observador.",
+      "La polarización se refiere a la orientación del campo eléctrico en ondas transversales, no a bordear obstáculos."
+    ]
+  },
+  {
+    "id": 26,
+    "textId": 4,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Una onda tiene una longitud de onda de 0,5 m y una frecuencia de 12 Hz. ¿Cuál es su rapidez de propagación?",
+    "opciones": [
+      "24,5 m/s",
+      "6 m/s",
+      "12,5 m/s",
+      "0,04 m/s"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Ese valor corresponde a sumar longitud de onda y frecuencia, operación que no calcula la rapidez.",
+      "Según v=λ·f=0,5×12=6 m/s.",
+      "Ese valor no corresponde a multiplicar correctamente los datos entregados.",
+      "Ese valor resultaría de dividir en vez de multiplicar longitud de onda por frecuencia."
+    ]
+  },
+  {
+    "id": 27,
+    "textId": 4,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Un espejo cóncavo, a diferencia de uno convexo, puede formar imágenes:",
+    "opciones": [
+      "Únicamente virtuales y de menor tamaño que el objeto",
+      "Siempre reales e invertidas, sin excepción",
+      "Reales o virtuales, dependiendo de la posición del objeto respecto al foco",
+      "Nunca puede formar imágenes reales"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Ese comportamiento describe mejor al espejo convexo, que siempre forma imágenes virtuales y reducidas.",
+      "Cuando el objeto se ubica entre el foco y el espejo cóncavo, la imagen formada es virtual y derecha, no siempre real.",
+      "Según la posición del objeto respecto al foco, un espejo cóncavo puede formar imágenes reales e invertidas, o virtuales y derechas.",
+      "El espejo cóncavo sí puede formar imágenes reales cuando el objeto se sitúa más allá del foco."
+    ]
+  },
+  {
+    "id": 28,
+    "textId": 5,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un automóvil viaja a 20 m/s y frena con una desaceleración constante de 4 m/s². ¿Cuánto tiempo tarda en detenerse por completo?",
+    "opciones": [
+      "5 s",
+      "16 s",
+      "80 s",
+      "0,2 s"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Usando v=v₀−a·t, con v=0: t=v₀/a=20/4=5 s.",
+      "Ese valor corresponde a restar incorrectamente los datos entregados, sin relación con la fórmula de tiempo de frenado.",
+      "Ese valor resultaría de multiplicar en vez de dividir velocidad inicial y desaceleración.",
+      "Ese valor invierte la relación correcta entre velocidad inicial y desaceleración."
+    ]
+  },
+  {
+    "id": 29,
+    "textId": 5,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El trabajo realizado por una fuerza sobre un cuerpo se relaciona con la energía cinética de este porque:",
+    "opciones": [
+      "Solo la energía potencial se relaciona con el trabajo realizado sobre un cuerpo",
+      "El trabajo siempre disminuye la energía cinética de cualquier cuerpo",
+      "El trabajo y la energía cinética son magnitudes independientes, sin relación entre sí",
+      "El trabajo neto realizado sobre un cuerpo es igual al cambio en su energía cinética"
+    ],
+    "correcta": 3,
+    "expl": [
+      "El trabajo también se relaciona con la energía cinética, no solo con la energía potencial.",
+      "El trabajo puede aumentar o disminuir la energía cinética, dependiendo de si la fuerza actúa a favor o en contra del movimiento.",
+      "Ambas magnitudes están directamente relacionadas mediante el teorema del trabajo y la energía cinética.",
+      "El teorema del trabajo y la energía establece que el trabajo neto sobre un cuerpo es igual a la variación de su energía cinética."
+    ]
+  },
+  {
+    "id": 30,
+    "textId": 5,
+    "habilidad": "Investigación científica",
+    "enunciado": "Al analizar el diagrama de cuerpo libre de un bloque en reposo sobre un plano inclinado sin roce, se observa que el bloque no se desliza. Esto es posible únicamente si:",
+    "opciones": [
+      "No existe ninguna fuerza actuando sobre el bloque",
+      "Existe una fuerza adicional (como una cuerda) que equilibra la componente del peso paralela al plano",
+      "El peso del bloque es igual a cero",
+      "La superficie del plano inclinado es perfectamente vertical"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Sobre el bloque actúan al menos el peso y la normal; no es correcto afirmar ausencia total de fuerzas.",
+      "Sin roce, la única forma de que el bloque permanezca en reposo es que otra fuerza (como la tensión de una cuerda) anule la componente del peso paralela al plano.",
+      "Un peso igual a cero no es una condición física realista para un bloque con masa.",
+      "Si el plano fuera perfectamente vertical, el bloque caería libremente en ausencia de otra fuerza que lo sostenga."
+    ]
+  },
+  {
+    "id": 31,
+    "textId": 6,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Del modelo de capas de la Tierra, ¿cuál corresponde a la capa más externa y rígida, donde se ubican las placas tectónicas?",
+    "opciones": [
+      "Núcleo interno",
+      "Manto inferior",
+      "Núcleo externo",
+      "Litosfera"
+    ],
+    "correcta": 3,
+    "expl": [
+      "El núcleo interno es la capa más profunda y densa de la Tierra, no la más externa.",
+      "El manto inferior se ubica bajo la litosfera y presenta un comportamiento más plástico, no rígido.",
+      "El núcleo externo es una capa profunda en estado líquido, relacionada con el campo magnético terrestre.",
+      "La litosfera es la capa externa y rígida de la Tierra, fragmentada en placas tectónicas."
+    ]
+  },
+  {
+    "id": 32,
+    "textId": 6,
+    "habilidad": "Investigación científica",
+    "enunciado": "La existencia de cadenas de volcanes en medio de una placa tectónica, lejos de sus bordes, se explica mejor mediante:",
+    "opciones": [
+      "La proximidad de esa zona a la corteza oceánica más antigua del planeta",
+      "La ausencia total de actividad tectónica en esa zona",
+      "La fusión completa de toda la placa por igual",
+      "La presencia de un punto caliente (hot spot) fijo bajo la placa en movimiento"
+    ],
+    "correcta": 3,
+    "expl": [
+      "La antigüedad de la corteza oceánica no es, por sí sola, la causa de este tipo de volcanismo intraplaca.",
+      "La existencia de volcanes activos indica precisamente actividad geológica en esa zona, no su ausencia.",
+      "El volcanismo se concentra en zonas puntuales sobre el punto caliente, no en la fusión de la placa completa.",
+      "Un punto caliente estacionario bajo el manto genera volcanismo mientras la placa se desplaza sobre él, formando cadenas volcánicas lineales."
+    ]
+  },
+  {
+    "id": 33,
+    "textId": 6,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "La energía geotérmica que se aprovecha en algunas centrales eléctricas proviene principalmente:",
+    "opciones": [
+      "Del calor interno de la Tierra, asociado a procesos radiactivos y residuales de su formación",
+      "De la energía solar acumulada en la superficie terrestre",
+      "De la energía cinética de las mareas oceánicas",
+      "De la combustión de materia orgánica en el subsuelo"
+    ],
+    "correcta": 0,
+    "expl": [
+      "El calor interno terrestre proviene en gran parte de la desintegración de elementos radiactivos y del calor remanente de la formación del planeta.",
+      "La energía solar acumulada en superficie es la base de la energía solar, no de la geotérmica.",
+      "La energía de las mareas corresponde a la energía mareomotriz, distinta de la geotérmica.",
+      "La combustión de materia orgánica describe procesos de fuentes fósiles, no el origen de la energía geotérmica."
+    ]
+  },
+  {
+    "id": 34,
+    "textId": 7,
+    "habilidad": "Análisis de datos",
+    "enunciado": "En un circuito con dos resistencias de 6 Ω cada una, conectadas en paralelo, ¿cuál es la resistencia equivalente?",
+    "opciones": [
+      "12 Ω",
+      "6 Ω",
+      "3 Ω",
+      "0,3 Ω"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Ese valor corresponde a la resistencia equivalente si estuvieran conectadas en serie, no en paralelo.",
+      "En paralelo, la resistencia equivalente de resistencias iguales es menor que el valor de cada una, no igual.",
+      "Para dos resistencias iguales en paralelo, Req=R/2=6/2=3 Ω.",
+      "Ese valor no corresponde al cálculo correcto de resistencia equivalente en paralelo para estos datos."
+    ]
+  },
+  {
+    "id": 35,
+    "textId": 7,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un artefacto eléctrico consume una potencia de 200 W durante 3 horas. ¿Cuántos kWh de energía consume en total?",
+    "opciones": [
+      "66,7 kWh",
+      "60 kWh",
+      "600 kWh",
+      "0,6 kWh"
+    ],
+    "correcta": 3,
+    "expl": [
+      "Ese valor resultaría de dividir en vez de multiplicar los datos entregados.",
+      "Ese valor no corresponde a la conversión correcta entre watts y kilowatts antes de multiplicar por el tiempo.",
+      "Ese valor sobreestima notablemente la energía consumida en relación con los datos entregados.",
+      "Energía = Potencia × tiempo = 0,2 kW × 3 h = 0,6 kWh."
+    ]
+  },
+  {
+    "id": 36,
+    "textId": 7,
+    "habilidad": "Investigación científica",
+    "enunciado": "El interruptor diferencial en una instalación eléctrica domiciliaria cumple principalmente la función de:",
+    "opciones": [
+      "Aumentar el voltaje disponible en los enchufes",
+      "Almacenar energía eléctrica para cortes de suministro",
+      "Detectar fugas de corriente hacia tierra y cortar el circuito para prevenir electrocuciones",
+      "Reducir el consumo eléctrico total de la vivienda"
+    ],
+    "correcta": 2,
+    "expl": [
+      "El interruptor diferencial no aumenta el voltaje; su función es de protección, no de transformación de la corriente.",
+      "El interruptor diferencial no almacena energía; actúa de forma instantánea ante una falla detectada.",
+      "Este dispositivo detecta diferencias entre la corriente que entra y sale del circuito, señal de una fuga a tierra, y corta el suministro para evitar accidentes.",
+      "Su función es de seguridad frente a fugas de corriente, no de reducción del consumo eléctrico."
+    ]
+  }
+];
+
+const TOTAL_Q = QUESTIONS.length;
+const TIME_LIMIT = 4500; // 1h15min en segundos
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let currentQIndex = 0;
+let answers = {}; // {questionId: optionIndex}
+let finished = false;
+
+// Colores por competencia (mismos que en los módulos: Resolver problemas índigo, Modelar teal, Representar ámbar)
+const HAB_COLORS = {
+  "Conocimiento científico": {
+    "main": "#2563eb",
+    "soft": "#dbeafe",
+    "dark": "#1e40af"
+  },
+  "Análisis de datos": {
+    "main": "#d97706",
+    "soft": "#fef3c7",
+    "dark": "#92400e"
+  },
+  "Investigación científica": {
+    "main": "#16a34a",
+    "soft": "#dcfce7",
+    "dark": "#166534"
+  }
+};
+
+// ============ NAVEGACIÓN PORTADA -> EXAMEN ============
+document.getElementById('btnComenzar').addEventListener('click', ()=>{
+  document.getElementById('portada').style.display='none';
+  document.getElementById('examen').style.display='block';
+  initTabs();
+  initPalette();
+  renderQuestion(0);
+  startTimer();
+});
+
+function initTabs(){
+  const cont = document.getElementById('tabsTextos');
+  cont.innerHTML = TEXTS.map(t=>`<button class="tabTexto" data-tid="${t.id}">${t.titulo}</button>`).join('');
+  cont.querySelectorAll('.tabTexto').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tid = parseInt(btn.dataset.tid);
+      const firstQ = QUESTIONS.findIndex(q=>q.textId===tid);
+      if(firstQ>=0) renderQuestion(firstQ);
+    });
+  });
+}
+
+function initPalette(){
+  const grid = document.getElementById('paletteGrid');
+  grid.innerHTML = QUESTIONS.map((q,i)=>`<button class="paletteBtn" data-idx="${i}">${i+1}</button>`).join('');
+  grid.querySelectorAll('.paletteBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=> renderQuestion(parseInt(btn.dataset.idx)));
+  });
+}
+
+function renderQuestion(idx){
+  currentQIndex = idx;
+  const q = QUESTIONS[idx];
+  const text = TEXTS.find(t=>t.id===q.textId);
+
+  // tabs activo
+  document.querySelectorAll('.tabTexto').forEach(b=>{
+    b.classList.toggle('activo', parseInt(b.dataset.tid)===text.id);
+  });
+
+  // panel eje / formulario de apoyo
+  const panelTexto = document.getElementById('panelTexto');
+  panelTexto.innerHTML = `<span class="tipoTexto">${text.tipo}</span><h2>${text.titulo}</h2>` +
+    `<div class="formulaBox">${text.contenido.split('\n').join('<br><br>')}</div>`;
+
+  // progreso
+  document.getElementById('progresoTxt').textContent = `Pregunta ${idx+1} de ${TOTAL_Q}`;
+  document.getElementById('numPreguntaLbl').textContent = `Pregunta ${idx+1}`;
+
+  // enunciado
+  document.getElementById('enunciadoTxt').textContent = q.enunciado;
+
+  // opciones
+  const letras = ['A','B','C','D'];
+  const cont = document.getElementById('opcionesCont');
+  cont.innerHTML = q.opciones.map((op,i)=>{
+    const marcada = answers[q.id]===i ? 'marcada' : '';
+    return `<button class="opcion ${marcada}" data-oi="${i}"><span class="letra">${letras[i]}</span><span>${op}</span></button>`;
+  }).join('');
+  cont.querySelectorAll('.opcion').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      answers[q.id] = parseInt(btn.dataset.oi);
+      renderQuestion(currentQIndex);
+      updatePalette();
+    });
+  });
+
+  // nav prev/next
+  document.getElementById('btnPrev').disabled = idx===0;
+  document.getElementById('btnNext').disabled = idx===TOTAL_Q-1;
+
+  updatePalette();
+}
+
+function updatePalette(){
+  document.querySelectorAll('.paletteBtn').forEach((btn,i)=>{
+    btn.classList.toggle('respondida', answers[QUESTIONS[i].id]!==undefined);
+    btn.classList.toggle('activa', i===currentQIndex);
+  });
+}
+
+document.getElementById('btnPrev').addEventListener('click', ()=>{
+  if(currentQIndex>0) renderQuestion(currentQIndex-1);
+});
+document.getElementById('btnNext').addEventListener('click', ()=>{
+  if(currentQIndex<TOTAL_Q-1) renderQuestion(currentQIndex+1);
+});
+
+// ============ TIMER ============
+function startTimer(){
+  updateTimerDisplay();
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft<=0){
+      clearInterval(timerInterval);
+      finalizarPrueba(true);
+    }
+  },1000);
+}
+
+function updateTimerDisplay(){
+  const h = Math.floor(timeLeft/3600);
+  const m = Math.floor((timeLeft%3600)/60);
+  const s = timeLeft%60;
+  const el = document.getElementById('timer');
+  el.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.classList.toggle('alerta', timeLeft<=300);
+}
+
+// ============ FINALIZAR ============
+document.getElementById('btnFinalizar').addEventListener('click', ()=>{
+  const sinResponder = TOTAL_Q - Object.keys(answers).length;
+  let msg = '¿Seguro que quieres finalizar la prueba?';
+  if(sinResponder>0) msg = `Tienes ${sinResponder} pregunta(s) sin responder. ¿Seguro que quieres finalizar?`;
+  document.getElementById('modalTexto').textContent = msg;
+  document.getElementById('modalOverlay').classList.add('activo');
+});
+
+document.getElementById('modalCancelar').addEventListener('click', ()=>{
+  document.getElementById('modalOverlay').classList.remove('activo');
+});
+
+document.getElementById('modalConfirmar').addEventListener('click', ()=>{
+  document.getElementById('modalOverlay').classList.remove('activo');
+  finalizarPrueba(false);
+});
+
+function finalizarPrueba(porTiempo){
+  if(finished) return;
+  finished = true;
+  clearInterval(timerInterval);
+  document.getElementById('examen').style.display='none';
+  document.getElementById('resultados').style.display='block';
+  calcularResultados();
+}
+
+// ============ RESULTADOS ============
+function calcularResultados(){
+  let correctas = 0;
+  const habStats = {'Conocimiento científico':{total:0,correctas:0}, 'Análisis de datos':{total:0,correctas:0}, 'Investigación científica':{total:0,correctas:0}};
+
+  QUESTIONS.forEach(q=>{
+    habStats[q.habilidad].total++;
+    if(answers[q.id]===q.correcta){
+      correctas++;
+      habStats[q.habilidad].correctas++;
+    }
+  });
+
+  const pctGlobal = Math.round((correctas/TOTAL_Q)*100);
+  document.getElementById('scoreBig').textContent = `${correctas}/${TOTAL_Q}`;
+  document.getElementById('scorePct').textContent = `${pctGlobal}% de logro`;
+
+  // barras por competencia
+  const habRows = document.getElementById('habRows');
+  habRows.innerHTML = Object.keys(habStats).map(h=>{
+    const s = habStats[h];
+    const pct = s.total>0 ? Math.round((s.correctas/s.total)*100) : 0;
+    const c = HAB_COLORS[h];
+    return `<div class="habRow">
+      <span class="dotHab" style="background:${c.main}"></span>
+      <span class="nom">${h}</span>
+      <span class="barBg"><span class="barFill" style="width:${pct}%;background:${c.main}"></span></span>
+      <span class="pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  // diagnóstico + CTA
+  let habilidadesOrdenadas = Object.keys(habStats).map(h=>({
+    nombre:h,
+    pct: habStats[h].total>0 ? (habStats[h].correctas/habStats[h].total)*100 : 0
+  })).sort((a,b)=>a.pct-b.pct);
+  const masDebil = habilidadesOrdenadas[0];
+
+  let nivel, packSugerido;
+  if(pctGlobal < 50){
+    nivel = 'inicial';
+    packSugerido = 'Escalera Inicial, con foco en fundamentos de Ciencias – Física';
+  } else if(pctGlobal < 75){
+    nivel = 'intermedio';
+    packSugerido = 'Escalera Intermedia, para consolidar y subir tu puntaje de forma sostenida';
+  } else {
+    nivel = 'avanzado';
+    packSugerido = 'un pack orientado a tu carrera, para afinar detalles y asegurar tu puntaje';
+  }
+
+  document.getElementById('diagnosticoTxt').innerHTML =
+    `Obtuviste <strong>${correctas} de ${TOTAL_Q}</strong> preguntas correctas (${pctGlobal}% de logro). ` +
+    `Tu competencia con mayor margen de mejora es <strong>${masDebil.nombre}</strong> (${Math.round(masDebil.pct)}% de logro en esa competencia). ` +
+    `Según tu resultado, te recomendamos ${packSugerido}, priorizando ejercicios de ${masDebil.nombre.toLowerCase()}.`;
+
+  document.getElementById('ctaTexto').textContent =
+    `Con tu nivel actual, ${packSugerido}.`;
+
+  // revisión detallada
+  renderRevision();
+}
+
+function renderRevision(){
+  const cont = document.getElementById('revision');
+  const letras = ['A','B','C','D'];
+  cont.innerHTML = TEXTS.map(text=>{
+    const qs = QUESTIONS.filter(q=>q.textId===text.id);
+    const qsHtml = qs.map((q,i)=>{
+      const globalIdx = QUESTIONS.indexOf(q)+1;
+      const marcada = answers[q.id];
+      const optsHtml = q.opciones.map((op,oi)=>{
+        let cls='neutra';
+        if(oi===q.correcta) cls='correcta';
+        else if(oi===marcada) cls='marcadaIncorrecta';
+        return `<div class="revOpt ${cls}">${letras[oi]}. ${op}${oi===q.correcta?' ✓':''}${(oi===marcada && oi!==q.correcta)?' (tu respuesta)':''}<br><small>${q.expl[oi]}</small></div>`;
+      }).join('');
+      return `<div class="revQ">
+        <span class="revHab" style="color:${HAB_COLORS[q.habilidad].dark};background:${HAB_COLORS[q.habilidad].soft}">${q.habilidad}</span>
+        <div class="revEnun">${globalIdx}. ${q.enunciado}</div>
+        ${optsHtml}
+      </div>`;
+    }).join('');
+    return `<h3 style="margin-top:24px;">${text.titulo}</h3>${qsHtml}`;
+  }).join('');
+}
+
+document.getElementById('btnRevisar').addEventListener('click', ()=>{
+  const rev = document.getElementById('revision');
+  const btn = document.getElementById('btnRevisar');
+  const visible = rev.style.display==='block';
+  rev.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible ? 'Revisar respuestas y explicaciones' : 'Ocultar revisión';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ensayo N°1 · Ciencias Química · PAES Karuy</title>
+<style>
+  :root{
+    --prim:#ea580c;
+    --prim-soft:#ffedd5;
+    --prim-dark:#9a3412;
+    --ink:#1a1a1a;
+    --gray:#6b7280;
+    --gray-light:#e5e7eb;
+    --bg:#ffffff;
+    --green:#16a34a;
+    --amber:#d97706;
+    --red:#dc2626;
+    --teal:#0d9488;
+    --violet:#7c3aed;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Georgia','Times New Roman',serif;
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+  }
+  .sans{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+  h1,h2,h3{font-family:'Georgia','Times New Roman',serif;}
+  button{font-family:inherit;cursor:pointer;}
+  ::selection{background:var(--prim-soft);}
+
+  /* ---------- PORTADA ---------- */
+  #portada{
+    max-width:640px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-weight:700;font-size:14px;letter-spacing:.04em;color:var(--prim);
+    text-transform:uppercase;margin-bottom:32px;
+  }
+  .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--prim);}
+  #portada h1{font-size:32px;line-height:1.15;margin:0 0 6px;}
+  #portada .subt{color:var(--gray);font-size:16px;margin-bottom:28px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  .meta-row{
+    display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px;
+  }
+  .meta-chip{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:13px;font-weight:600;color:var(--prim-dark);
+    background:var(--prim-soft);border:1px solid #c7d2fe;
+    padding:8px 14px;border-radius:999px;
+  }
+  .instrucciones{
+    background:#fafafa;border:1px solid var(--gray-light);border-radius:12px;
+    padding:24px 26px;margin-bottom:32px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .instrucciones h3{font-size:15px;margin:0 0 14px;color:var(--ink);}
+  .instrucciones ol{margin:0;padding-left:20px;color:#374151;font-size:14.5px;line-height:1.65;}
+  .instrucciones li{margin-bottom:8px;}
+  #btnComenzar{
+    width:100%;background:var(--prim);color:#fff;border:none;border-radius:10px;
+    padding:16px 20px;font-size:16px;font-weight:700;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    transition:background .15s ease;
+  }
+  #btnComenzar:hover{background:var(--prim-dark);}
+  .nota-ia{
+    text-align:center;margin-top:14px;font-size:12.5px;color:var(--gray);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+
+  /* ---------- EXAMEN (fondo blanco / letras negras, estilo oficial) ---------- */
+  #examen{display:none;background:#fff;min-height:100vh;}
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    background:#fff;border-bottom:2px solid var(--ink);
+    padding:10px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .topbar .titulo-mini{font-weight:700;font-size:14px;}
+  .topbar .progreso{font-size:13px;color:var(--gray);}
+  #timer{
+    font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;
+    padding:6px 14px;border:2px solid var(--ink);border-radius:8px;
+  }
+  #timer.alerta{color:var(--red);border-color:var(--red);}
+  .btnFinalizar{
+    background:var(--ink);color:#fff;border:none;border-radius:8px;
+    padding:9px 16px;font-size:13px;font-weight:700;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+
+  .tabsTextos{
+    display:flex;gap:0;border-bottom:1px solid var(--gray-light);
+    overflow-x:auto;background:#fff;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .tabTexto{
+    flex:0 0 auto;padding:12px 18px;font-size:13px;font-weight:600;color:var(--gray);
+    border-bottom:3px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;
+  }
+  .tabTexto.activo{color:var(--ink);border-bottom-color:var(--prim);}
+
+  .examLayout{
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    max-width:1200px;margin:0 auto;
+    min-height:calc(100vh - 110px);
+  }
+  @media (max-width:860px){
+    .examLayout{grid-template-columns:1fr;}
+  }
+  .panelTexto{
+    padding:28px 32px;border-right:1px solid var(--gray-light);
+    max-height:calc(100vh - 110px);overflow-y:auto;
+  }
+  @media (max-width:860px){
+    .panelTexto{border-right:none;border-bottom:8px solid #f3f4f6;max-height:none;}
+  }
+  .panelTexto h2{font-size:20px;margin:0 0 4px;}
+  .panelTexto .tipoTexto{font-size:12px;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;margin-bottom:16px;display:block;}
+  .panelTexto p{font-size:16px;line-height:1.75;margin:0 0 16px;color:#111;}
+  .panelTexto .formulaBox{
+    background:var(--prim-soft);border:1px solid #c7d2fe;border-radius:10px;
+    padding:14px 16px;margin-bottom:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:14.5px;color:var(--prim-dark);line-height:1.6;
+  }
+
+  .panelPregunta{padding:28px 32px;}
+  .navPregunta{
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .navPregunta button{
+    background:#fff;border:1.5px solid var(--ink);border-radius:8px;
+    padding:7px 14px;font-size:13px;font-weight:600;
+  }
+  .navPregunta button:disabled{opacity:.3;cursor:not-allowed;}
+  .numPregunta{font-weight:700;font-size:13px;color:var(--gray);}
+  .enunciado{font-size:17px;line-height:1.6;margin:0 0 20px;font-weight:600;}
+  .opciones{display:flex;flex-direction:column;gap:10px;}
+  .opcion{
+    display:flex;align-items:flex-start;gap:12px;
+    border:1.5px solid var(--gray-light);border-radius:10px;
+    padding:13px 16px;font-size:15px;line-height:1.5;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:#fff;
+  }
+  .opcion:hover{border-color:var(--ink);}
+  .opcion.marcada{border-color:var(--prim);background:var(--prim-soft);}
+  .opcion .letra{
+    flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;
+  }
+  .opcion.marcada .letra{background:var(--prim);border-color:var(--prim);color:#fff;}
+
+  .palette{
+    margin-top:26px;padding-top:20px;border-top:1px solid var(--gray-light);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .palette .lbl{font-size:12px;color:var(--gray);margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;}
+  .paletteGrid{display:grid;grid-template-columns:repeat(11,1fr);gap:6px;}
+  .paletteBtn{
+    aspect-ratio:1;border:1.5px solid var(--gray-light);border-radius:6px;background:#fff;
+    font-size:11.5px;font-weight:700;color:var(--gray);
+  }
+  .paletteBtn.respondida{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .paletteBtn.activa{border-color:var(--prim);box-shadow:0 0 0 2px var(--prim-soft);}
+
+  /* ---------- RESULTADOS ---------- */
+  #resultados{display:none;max-width:760px;margin:0 auto;padding:48px 24px 100px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#fff 0%,#f8f8ff 100%);}
+  .scoreCard{
+    background:linear-gradient(135deg,#e0e7ff 0%,#c7d2fe 55%,#a5b4fc 100%);
+    border:1px solid #c7d2fe;border-radius:20px;
+    padding:36px 32px;text-align:center;margin-bottom:28px;
+    box-shadow:0 10px 30px -12px rgba(79,70,229,.35);
+  }
+  .scoreCard .big{font-size:56px;font-weight:800;color:var(--prim-dark);line-height:1;letter-spacing:-.02em;}
+  .scoreCard .sub{color:var(--prim-dark);font-size:14px;margin-top:8px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;}
+  .habBlock{margin-bottom:28px;}
+  .habBlock h3{font-size:15px;margin:0 0 14px;color:var(--ink);}
+  .habRow{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .habRow .dotHab{width:11px;height:11px;border-radius:50%;flex:0 0 auto;}
+  .habRow .nom{width:140px;flex:0 0 auto;font-size:13.5px;font-weight:700;}
+  .habRow .barBg{flex:1;height:14px;background:#f3f4f6;border-radius:99px;overflow:hidden;}
+  .habRow .barFill{height:100%;border-radius:99px;transition:width .6s ease;}
+  .habRow .pct{width:44px;flex:0 0 auto;text-align:right;font-size:13.5px;font-weight:800;color:var(--ink);}
+
+  .diagnostico{
+    background:#fff7ed;border:1px solid #fed7aa;border-radius:14px;
+    padding:22px 24px;margin-bottom:28px;font-size:14.5px;line-height:1.65;color:#374151;
+  }
+  .diagnostico strong{color:var(--prim-dark);}
+
+  .ctaBox{
+    background:linear-gradient(135deg,#4338ca 0%,#4f46e5 45%,#818cf8 100%);
+    border-radius:18px;padding:30px 28px;text-align:center;margin-bottom:24px;
+    box-shadow:0 14px 34px -14px rgba(67,56,202,.55);
+  }
+  .ctaBox p{color:#eef2ff;font-size:14.5px;margin:0 0 18px;font-weight:600;}
+  .ctaBox a{
+    display:inline-block;background:#fff;color:var(--prim-dark);text-decoration:none;
+    padding:15px 32px;border-radius:12px;font-weight:800;font-size:15.5px;
+    box-shadow:0 4px 14px rgba(0,0,0,.15);transition:transform .15s ease;
+  }
+  .ctaBox a:hover{transform:translateY(-2px);}
+
+  #btnRevisar{
+    width:100%;background:#fff;border:1.5px solid var(--ink);color:var(--ink);
+    border-radius:10px;padding:13px;font-weight:700;font-size:14.5px;margin-bottom:6px;
+  }
+
+  /* ---------- MODAL CONFIRMACION ---------- */
+  #modalOverlay{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;
+    align-items:center;justify-content:center;padding:20px;
+  }
+  #modalOverlay.activo{display:flex;}
+  .modalBox{
+    background:#fff;border-radius:14px;padding:26px 26px 20px;max-width:380px;width:100%;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .modalBox p{font-size:14.5px;line-height:1.55;color:#374151;margin:0 0 20px;}
+  .modalBtns{display:flex;gap:10px;}
+  .modalBtns button{
+    flex:1;border-radius:8px;padding:11px;font-size:14px;font-weight:700;border:none;
+  }
+  #modalCancelar{background:#f3f4f6;color:var(--ink);}
+  #modalConfirmar{background:var(--prim);color:#fff;}
+
+  #revision{display:none;margin-top:28px;}
+  .revQ{border:1px solid var(--gray-light);border-radius:10px;padding:18px 20px;margin-bottom:14px;}
+  .revQ .revEnun{font-weight:700;font-size:14.5px;margin-bottom:10px;font-family:Georgia,serif;}
+  .revOpt{font-size:13.5px;padding:8px 10px;border-radius:6px;margin-bottom:6px;line-height:1.5;}
+  .revOpt.correcta{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;}
+  .revOpt.marcadaIncorrecta{background:#fef2f2;border:1px solid #fecaca;color:#991b1b;}
+  .revOpt.neutra{background:#fafafa;border:1px solid #f0f0f0;color:#4b5563;}
+  .revHab{display:inline-block;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;margin-bottom:10px;}
+
+  .footerNota{text-align:center;font-size:12px;color:var(--gray);margin-top:20px;}
+</style>
+</head>
+<body>
+
+<!-- ================= PORTADA ================= -->
+<div id="portada">
+  <div class="brand"><span class="dot"></span>PAES KARUY</div>
+  <h1>Ensayo N°1 · Ciencias Química</h1>
+  <p class="subt">Módulo Común + Módulo Electivo de Química · versión reducida, aprox. mitad de la prueba oficial de Ciencias.</p>
+
+  <div class="meta-row">
+    <span class="meta-chip">36 preguntas</span>
+    <span class="meta-chip">Módulo Común (24) + Electivo Química (12)</span>
+    <span class="meta-chip">1 hora 15 minutos</span>
+    <span class="meta-chip">Sin descuento por error</span>
+  </div>
+
+  <div class="instrucciones">
+    <h3>Instrucciones</h3>
+    <ol>
+      <li>Esta prueba contiene 36 preguntas de selección múltiple con 4 opciones (A, B, C y D), de las cuales solo una es correcta.</li>
+      <li>Las primeras 24 preguntas corresponden al <strong>Módulo Común</strong> (mezcla de Biología, Física y Química) y las últimas 12 al <strong>Módulo Electivo de Química</strong>, igual que la estructura real de la prueba de Ciencias PAES.</li>
+      <li>Dispones de 1 hora y 15 minutos para responder. El cronómetro corre automáticamente y no se puede pausar.</li>
+      <li>No se descuenta puntaje por respuestas erradas, así que te conviene responder todas las preguntas.</li>
+      <li>Puedes moverte libremente entre las áreas temáticas y sus preguntas usando el panel numerado. Cada área muestra un breve apoyo conceptual, igual que en la prueba real.</li>
+      <li>Al finalizar (o cuando se acabe el tiempo), verás tu puntaje, un desglose por habilidad científica y una recomendación de estudio personalizada.</li>
+      <li>El tutor IA está desactivado durante esta rendición, igual que en la prueba real.</li>
+    </ol>
+  </div>
+
+  <button id="btnComenzar">Comenzar ensayo</button>
+  <p class="nota-ia">Material de práctica PAES Karuy · No reproduce contenido oficial DEMRE</p>
+</div>
+
+<!-- ================= EXAMEN ================= -->
+<div id="examen">
+  <div class="topbar">
+    <div class="titulo-mini">Ensayo N°1 · Ciencias Química</div>
+    <div class="progreso" id="progresoTxt">Pregunta 1 de 36</div>
+    <div id="timer">1:15:00</div>
+    <button class="btnFinalizar" id="btnFinalizar">Finalizar prueba</button>
+  </div>
+  <div class="tabsTextos" id="tabsTextos"></div>
+  <div class="examLayout">
+    <div class="panelTexto" id="panelTexto"></div>
+    <div class="panelPregunta">
+      <div class="navPregunta">
+        <button id="btnPrev">← Anterior</button>
+        <span class="numPregunta" id="numPreguntaLbl"></span>
+        <button id="btnNext">Siguiente →</button>
+      </div>
+      <p class="enunciado" id="enunciadoTxt"></p>
+      <div class="opciones" id="opcionesCont"></div>
+      <div class="palette">
+        <div class="lbl">Ir a pregunta</div>
+        <div class="paletteGrid" id="paletteGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RESULTADOS ================= -->
+<div id="resultados">
+  <div class="scoreCard">
+    <div class="big" id="scoreBig">0/36</div>
+    <div class="sub" id="scorePct">0% de logro</div>
+  </div>
+
+  <div class="habBlock">
+    <h3>Desglose por habilidad científica</h3>
+    <div id="habRows"></div>
+  </div>
+
+  <div class="diagnostico" id="diagnosticoTxt"></div>
+
+  <div class="ctaBox">
+    <p id="ctaTexto">Según tu resultado, te recomendamos un plan de estudio.</p>
+    <a href="#" target="_blank">Ver planes PAES Karuy</a>
+  </div>
+
+  <button id="btnRevisar">Revisar respuestas y explicaciones</button>
+  <div id="revision"></div>
+
+  <p class="footerNota">PAES Karuy · Ensayo de práctica · No reproduce contenido oficial DEMRE</p>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div id="modalOverlay">
+  <div class="modalBox">
+    <p id="modalTexto">¿Seguro que quieres finalizar la prueba?</p>
+    <div class="modalBtns">
+      <button id="modalCancelar">Cancelar</button>
+      <button id="modalConfirmar">Finalizar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ DATOS: MÓDULO COMÚN + MÓDULO ELECTIVO (con apoyo conceptual, no son "textos de lectura") ============
+const TEXTS = [
+  {
+    "id": 1,
+    "tipo": "Módulo Común · Eje Biología",
+    "titulo": "Biología",
+    "contenido": "El Módulo Común integra preguntas de Biología, Física y Química con un nivel de exigencia transversal.\nEn este eje se evalúan células y sus estructuras, sistema nervioso, reproducción, herencia, evolución y relación organismo-ambiente."
+  },
+  {
+    "id": 2,
+    "tipo": "Módulo Común · Eje Física",
+    "titulo": "Física",
+    "contenido": "En este eje se evalúan ondas, mecánica (movimiento y fuerzas), energía-Tierra (geosfera) y electricidad, con foco conceptual más que en cálculo extenso.\nFórmulas de apoyo: v=d/t; F=m·a; V=I·R."
+  },
+  {
+    "id": 3,
+    "tipo": "Módulo Común · Eje Química",
+    "titulo": "Química",
+    "contenido": "En este eje se evalúan estructura atómica, clasificación de la materia, química orgánica y reacciones químicas con estequiometría básica.\nRecuerda: n(mol)=masa/masa molar; concentración molar=mol de soluto/L de solución."
+  },
+  {
+    "id": 4,
+    "tipo": "Módulo Electivo Química",
+    "titulo": "Estructura atómica",
+    "contenido": "Área centrada en clasificación de la materia, procedimientos de separación de mezclas, modelos atómicos (Dalton, Thomson, Rutherford, Bohr) y número atómico/másico."
+  },
+  {
+    "id": 5,
+    "tipo": "Módulo Electivo Química",
+    "titulo": "Química orgánica",
+    "contenido": "Área centrada en el átomo de carbono (tetravalencia, hibridación, tipos de enlace) y compuestos orgánicos: hidrocarburos y grupos funcionales."
+  },
+  {
+    "id": 6,
+    "tipo": "Módulo Electivo Química",
+    "titulo": "Reacciones químicas y estequiometría",
+    "contenido": "Área centrada en leyes ponderales, balance de ecuaciones, reactivo limitante y en exceso, análisis porcentual, y unidades de concentración química y física.\nFórmulas de apoyo: n=masa/M; concentración molar=mol soluto/L solución."
+  }
+];
+
+const QUESTIONS = [
+  {
+    "id": 1,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Según el modelo de mosaico fluido, la membrana plasmática está compuesta principalmente por:",
+    "opciones": [
+      "Una bicapa de fosfolípidos rígida y estática, sin proteínas",
+      "Una única capa de proteínas sin lípidos",
+      "Una pared de celulosa impermeable a toda sustancia",
+      "Una bicapa de fosfolípidos con proteínas que pueden desplazarse lateralmente"
+    ],
+    "correcta": 3,
+    "expl": [
+      "El modelo de mosaico fluido describe la membrana como dinámica, no rígida ni estática.",
+      "La membrana está compuesta principalmente por una bicapa lipídica, no solo por proteínas.",
+      "La pared de celulosa es una estructura propia de células vegetales, externa a la membrana plasmática, no un componente de esta.",
+      "El modelo de mosaico fluido plantea una bicapa de fosfolípidos en la que las proteínas se mueven lateralmente, dando fluidez a la estructura."
+    ]
+  },
+  {
+    "id": 2,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El ARN mensajero (ARNm) cumple un rol clave en la síntesis de proteínas porque:",
+    "opciones": [
+      "Almacena permanentemente la información genética de la célula",
+      "Lleva la información genética del núcleo al ribosoma para ser traducida en una proteína",
+      "Transporta aminoácidos hasta el ribosoma",
+      "Cataliza directamente la formación de enlaces peptídicos sin participar el ribosoma"
+    ],
+    "correcta": 1,
+    "expl": [
+      "El almacenamiento permanente de la información genética corresponde al ADN, no al ARNm.",
+      "El ARNm copia la información genética del ADN y la transporta hasta el ribosoma, donde se traduce en una secuencia de aminoácidos.",
+      "El transporte de aminoácidos hacia el ribosoma es función del ARN de transferencia (ARNt), no del ARNm.",
+      "La formación de enlaces peptídicos ocurre en el ribosoma mediante ARN ribosomal con función catalítica, no por acción directa del ARNm."
+    ]
+  },
+  {
+    "id": 3,
+    "textId": 1,
+    "habilidad": "Investigación científica",
+    "enunciado": "El aumento súbito de la hormona luteinizante (LH) a mitad del ciclo menstrual desencadena principalmente:",
+    "opciones": [
+      "La menstruación",
+      "El inicio de la pubertad",
+      "La implantación del embrión en el útero",
+      "La ovulación"
+    ],
+    "correcta": 3,
+    "expl": [
+      "La menstruación ocurre al final del ciclo, asociada a la caída de progesterona, no al pico de LH.",
+      "La pubertad es un proceso de maduración que ocurre años antes de que se establezca el ciclo hormonal mensual regular.",
+      "La implantación ocurre días después de la ovulación, si hay fecundación, y depende de otros factores hormonales posteriores.",
+      "El pico de LH a mitad del ciclo es la señal hormonal que desencadena la liberación del óvulo desde el ovario, es decir, la ovulación."
+    ]
+  },
+  {
+    "id": 4,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Una diferencia fundamental entre mitosis y meiosis es que la mitosis produce:",
+    "opciones": [
+      "Dos células hijas diploides genéticamente idénticas a la célula madre",
+      "Cuatro células hijas haploides genéticamente distintas entre sí",
+      "Cuatro células hijas diploides idénticas",
+      "Dos células hijas haploides distintas entre sí"
+    ],
+    "correcta": 0,
+    "expl": [
+      "La mitosis genera dos células hijas diploides, genéticamente idénticas entre sí y a la célula madre.",
+      "Producir cuatro células haploides distintas es característico de la meiosis, no de la mitosis.",
+      "La mitosis produce dos células hijas, no cuatro; producir cuatro corresponde a la meiosis.",
+      "Las células producidas por mitosis son diploides, no haploides."
+    ]
+  },
+  {
+    "id": 5,
+    "textId": 1,
+    "habilidad": "Investigación científica",
+    "enunciado": "Darwin observó que los pinzones de las islas Galápagos presentaban picos de formas distintas según la disponibilidad de alimento en cada isla. Esta observación es un ejemplo de:",
+    "opciones": [
+      "Mutación inducida directamente por el tipo de alimento disponible",
+      "Un fenómeno sin relación con la variabilidad genética de la población",
+      "Herencia de caracteres adquiridos durante la vida del individuo",
+      "Adaptación por selección natural frente a distintas presiones ambientales"
+    ],
+    "correcta": 3,
+    "expl": [
+      "El alimento no induce mutaciones de manera dirigida; actúa como presión selectiva sobre variantes ya existentes.",
+      "El fenómeno depende justamente de la variabilidad genética previa entre los pinzones de distintas islas.",
+      "No se trata de caracteres adquiridos durante la vida de un individuo, sino de variantes heredables preexistentes en la población.",
+      "Las variantes de pico mejor adaptadas a la disponibilidad de alimento local sobrevivieron y se reprodujeron más, un caso clásico de selección natural."
+    ]
+  },
+  {
+    "id": 6,
+    "textId": 1,
+    "habilidad": "Análisis de datos",
+    "enunciado": "En una cadena trófica, solo cerca del 10% de la energía disponible en un nivel trófico pasa al siguiente nivel. Si los productores de un ecosistema fijan 10.000 kcal, ¿cuánta energía aproximada estará disponible para los consumidores secundarios?",
+    "opciones": [
+      "1.000 kcal",
+      "10 kcal",
+      "100 kcal",
+      "5.000 kcal"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Ese valor corresponde a la energía disponible para los consumidores primarios (un solo paso trófico), no para los secundarios.",
+      "Ese valor correspondería a aplicar la regla del 10% tres veces, un nivel trófico más de lo que pide el enunciado.",
+      "Aplicando el 10% dos veces (productores→primarios→secundarios): 10.000×0,10×0,10=100 kcal.",
+      "Ese valor no corresponde a aplicar correctamente la regla del 10% de manera sucesiva entre niveles tróficos."
+    ]
+  },
+  {
+    "id": 7,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Las vacunas generan inmunidad protectora principalmente porque:",
+    "opciones": [
+      "Estimulan al sistema inmune a producir memoria inmunológica frente a un antígeno específico",
+      "Eliminan directamente al patógeno cada vez que este ingresa al organismo",
+      "Reemplazan la función de los glóbulos blancos de forma permanente",
+      "Aumentan la temperatura corporal para destruir microorganismos"
+    ],
+    "correcta": 0,
+    "expl": [
+      "La vacuna expone al sistema inmune a un antígeno de forma controlada, generando células de memoria que responden rápidamente ante una infección real posterior.",
+      "La vacuna no actúa eliminando directamente al patógeno en cada exposición futura; su efecto es indirecto, a través del sistema inmune.",
+      "Las vacunas no reemplazan a los glóbulos blancos; estimulan su función normal.",
+      "La fiebre es una respuesta inmune general, no el mecanismo por el cual actúan las vacunas."
+    ]
+  },
+  {
+    "id": 8,
+    "textId": 1,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El fenómeno por el cual dos especies no emparentadas presentan una coloración o forma similar como estrategia de defensa frente a depredadores se denomina:",
+    "opciones": [
+      "Simbiosis mutualista",
+      "Mimetismo",
+      "Depredación",
+      "Competencia interespecífica"
+    ],
+    "correcta": 1,
+    "expl": [
+      "La simbiosis mutualista implica un beneficio mutuo entre dos especies que interactúan estrechamente, no una imitación de apariencia.",
+      "El mimetismo consiste en que una especie imita la apariencia de otra (a menudo peligrosa o de mal sabor) para disuadir a sus depredadores.",
+      "La depredación es la relación en que un organismo se alimenta de otro, no una estrategia de semejanza física.",
+      "La competencia interespecífica ocurre cuando distintas especies compiten por un mismo recurso, sin relación con la imitación de apariencia."
+    ]
+  },
+  {
+    "id": 9,
+    "textId": 2,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un cuerpo de 4 kg se mueve con una rapidez de 5 m/s. ¿Cuál es su energía cinética?",
+    "opciones": [
+      "20 J",
+      "10 J",
+      "100 J",
+      "50 J"
+    ],
+    "correcta": 3,
+    "expl": [
+      "Ese valor corresponde al producto simple de masa por velocidad, sin considerar el exponente al cuadrado ni el factor 1/2.",
+      "Ese valor no corresponde a la fórmula Ec=½·m·v² aplicada con los datos entregados.",
+      "Ese valor duplica incorrectamente el resultado que se obtiene al aplicar correctamente la fórmula de energía cinética.",
+      "Según Ec=½·m·v²=½×4×5²=½×4×25=50 J."
+    ]
+  },
+  {
+    "id": 10,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El principio de conservación de la energía mecánica establece que, en ausencia de roce, la suma de la energía cinética y potencial de un cuerpo:",
+    "opciones": [
+      "Aumenta constantemente con el tiempo",
+      "Permanece constante durante el movimiento",
+      "Disminuye siempre a medida que el cuerpo se mueve",
+      "Se transforma completamente en calor"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Sin fuerzas disipativas, la energía mecánica no aumenta espontáneamente; se conserva.",
+      "En ausencia de roce, la energía mecánica total (cinética más potencial) del sistema se mantiene constante, aunque se transforme entre sus dos formas.",
+      "La energía mecánica no disminuye si no existen fuerzas disipativas como el roce actuando sobre el cuerpo.",
+      "La transformación en calor es propia de sistemas con roce u otras fuerzas disipativas, no del caso ideal sin roce."
+    ]
+  },
+  {
+    "id": 11,
+    "textId": 2,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un líquido de densidad 1.000 kg/m³ se encuentra en un recipiente. ¿Qué relación describe correctamente cómo cambia la presión hidrostática con la profundidad, según P=ρ·g·h?",
+    "opciones": [
+      "La presión disminuye al aumentar la profundidad",
+      "La presión es independiente de la profundidad",
+      "La presión aumenta de forma directamente proporcional a la profundidad",
+      "La presión depende únicamente de la forma del recipiente"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Según la fórmula P=ρ·g·h, la presión aumenta con la profundidad, no disminuye.",
+      "La presión hidrostática sí depende de la profundidad h, según la fórmula P=ρ·g·h.",
+      "Como P=ρ·g·h, con ρ y g constantes, la presión crece de forma directamente proporcional a la profundidad h.",
+      "La presión hidrostática depende de la profundidad y la densidad del líquido, no de la forma del recipiente que lo contiene."
+    ]
+  },
+  {
+    "id": 12,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El efecto invernadero natural de la Tierra se produce principalmente porque:",
+    "opciones": [
+      "La atmósfera refleja toda la radiación solar antes de llegar a la superficie",
+      "Ciertos gases atmosféricos retienen parte de la radiación infrarroja emitida por la superficie terrestre",
+      "El núcleo terrestre emite calor directamente hacia la atmósfera",
+      "La capa de ozono absorbe toda la radiación visible del Sol"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Si toda la radiación solar se reflejara, la superficie no se calentaría en absoluto, lo que no es consistente con el efecto invernadero.",
+      "Gases como el CO₂ y el vapor de agua absorben y reemiten parte de la radiación infrarroja terrestre, manteniendo el calor cerca de la superficie.",
+      "El calor del núcleo terrestre es mínimo en comparación con la energía solar recibida y no es la causa del efecto invernadero.",
+      "La capa de ozono absorbe principalmente radiación ultravioleta, no toda la luz visible ni es la causa directa del efecto invernadero."
+    ]
+  },
+  {
+    "id": 13,
+    "textId": 2,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un artefacto eléctrico funciona con un voltaje de 12 V y una corriente de 2 A. ¿Cuál es la potencia eléctrica consumida?",
+    "opciones": [
+      "6 W",
+      "14 W",
+      "0,17 W",
+      "24 W"
+    ],
+    "correcta": 3,
+    "expl": [
+      "Ese valor corresponde a dividir voltaje por corriente, operación que no calcula la potencia.",
+      "Ese valor corresponde a sumar voltaje y corriente, lo cual no representa la potencia según P=V·I.",
+      "Ese valor invierte la relación correcta entre voltaje y corriente.",
+      "Según P=V·I=12×2=24 W."
+    ]
+  },
+  {
+    "id": 14,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El modelo planetario de Kepler mejoró al modelo heliocéntrico de Copérnico al establecer que:",
+    "opciones": [
+      "Los planetas se mueven en órbitas circulares perfectas",
+      "Los planetas describen órbitas elípticas con el Sol en uno de los focos",
+      "La Tierra es el centro fijo de todas las órbitas planetarias",
+      "Los planetas no siguen ninguna trayectoria regular"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Las órbitas circulares perfectas correspondían a la propuesta original de Copérnico, no a la mejora introducida por Kepler.",
+      "Kepler estableció que las órbitas planetarias son elipses, con el Sol ubicado en uno de sus focos, mejorando la precisión del modelo heliocéntrico.",
+      "Ubicar a la Tierra como centro fijo corresponde al modelo geocéntrico, contrario al aporte de Kepler.",
+      "Kepler precisamente demostró que los planetas siguen trayectorias regulares y predecibles, descritas por sus leyes del movimiento planetario."
+    ]
+  },
+  {
+    "id": 15,
+    "textId": 2,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Una palanca de segundo género, en la que la resistencia se ubica entre el punto de apoyo y la fuerza aplicada, permite principalmente:",
+    "opciones": [
+      "Aumentar la fuerza aplicada necesaria para mover una carga, respecto a la que se requeriría sin la palanca",
+      "Reducir la fuerza necesaria para mover una carga, obteniendo ventaja mecánica",
+      "Eliminar por completo la necesidad de aplicar fuerza alguna",
+      "Aumentar el peso real del objeto que se desea mover"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Una palanca de segundo género está diseñada justamente para reducir, no aumentar, la fuerza necesaria para mover la carga.",
+      "En este tipo de palanca, la distancia entre el punto de apoyo y la fuerza aplicada es mayor que hasta la resistencia, lo que genera ventaja mecánica y reduce la fuerza requerida.",
+      "La palanca no elimina la necesidad de fuerza; solo reduce la magnitud requerida para lograr el mismo efecto.",
+      "El peso real del objeto no cambia por el uso de una palanca; lo que cambia es la fuerza necesaria para moverlo."
+    ]
+  },
+  {
+    "id": 16,
+    "textId": 2,
+    "habilidad": "Investigación científica",
+    "enunciado": "Para determinar el epicentro de un sismo, los científicos utilizan el registro de ondas sísmicas en al menos tres estaciones sismográficas distintas principalmente porque:",
+    "opciones": [
+      "Una sola estación no puede detectar ondas sísmicas de ningún tipo",
+      "Solo así se puede medir la magnitud del sismo en la escala de Richter",
+      "La triangulación con tres distancias permite determinar un único punto de origen del sismo",
+      "Las ondas sísmicas cambian de velocidad en cada estación de forma impredecible"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Una estación sí puede detectar ondas sísmicas; lo que no puede hacer por sí sola es determinar la ubicación exacta del epicentro.",
+      "La magnitud se puede estimar con el registro de una sola estación; el uso de varias estaciones se relaciona con la localización del epicentro, no con la magnitud en sí.",
+      "Con la distancia al epicentro calculada desde al menos tres estaciones, mediante triangulación se puede determinar la ubicación única del epicentro.",
+      "La velocidad de las ondas sísmicas depende de las propiedades del material que atraviesan, pero es un fenómeno predecible según el modelo de capas terrestres, no aleatorio."
+    ]
+  },
+  {
+    "id": 17,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "La escala de pH permite clasificar una solución como ácida, neutra o básica. Una solución con pH=3 se considera:",
+    "opciones": [
+      "Fuertemente básica",
+      "Ácida",
+      "Neutra",
+      "Sin ninguna propiedad ácido-base"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Un pH bajo, como 3, está lejos del rango básico, que corresponde a valores superiores a 7.",
+      "Un pH menor a 7, como 3, indica una solución ácida, mientras más bajo el valor, mayor la acidez.",
+      "El pH neutro corresponde a un valor de 7, no a 3.",
+      "Toda solución acuosa presenta un valor de pH y, por lo tanto, propiedades ácido-base definidas."
+    ]
+  },
+  {
+    "id": 18,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Al descender en un mismo grupo de la tabla periódica, el radio atómico de los elementos tiende a:",
+    "opciones": [
+      "Aumentar, debido a que se agregan nuevos niveles de energía",
+      "Disminuir, debido a la mayor carga nuclear efectiva",
+      "Mantenerse exactamente igual en todos los elementos",
+      "Variar de forma completamente aleatoria sin ningún patrón"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Al descender en un grupo, se añaden nuevos niveles de energía ocupados por electrones, lo que aumenta el radio atómico de los elementos.",
+      "La disminución del radio atómico es la tendencia característica al avanzar de izquierda a derecha en un mismo periodo, no al descender en un grupo.",
+      "El radio atómico varía de forma predecible entre los elementos de un mismo grupo, no permanece constante.",
+      "La variación del radio atómico sigue un patrón periódico bien definido, no es aleatoria."
+    ]
+  },
+  {
+    "id": 19,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "En una reacción de neutralización entre un ácido y una base, los productos característicos son:",
+    "opciones": [
+      "Un óxido metálico y agua",
+      "Un metal puro y un gas",
+      "Dos ácidos distintos",
+      "Una sal y agua"
+    ],
+    "correcta": 3,
+    "expl": [
+      "La formación de un óxido metálico no es el resultado típico de una reacción de neutralización ácido-base.",
+      "La obtención de un metal puro y un gas no corresponde a los productos típicos de una neutralización ácido-base.",
+      "Una reacción de neutralización involucra un ácido y una base, no dos ácidos, y no produce otro ácido como resultado principal.",
+      "En una neutralización, el ácido y la base reaccionan para formar una sal y agua como productos característicos."
+    ]
+  },
+  {
+    "id": 20,
+    "textId": 3,
+    "habilidad": "Análisis de datos",
+    "enunciado": "¿Cuántos gramos de agua (H₂O, masa molar 18 g/mol) se producen a partir de 5 moles de H₂O?",
+    "opciones": [
+      "18 g",
+      "5 g",
+      "23 g",
+      "90 g"
+    ],
+    "correcta": 3,
+    "expl": [
+      "Ese valor corresponde a la masa molar del agua, sin multiplicar por el número de moles indicado.",
+      "Ese valor corresponde al número de moles entregado, sin realizar la conversión a masa.",
+      "Ese valor resultaría de sumar en vez de multiplicar los datos entregados.",
+      "Masa=moles×masa molar=5×18=90 g."
+    ]
+  },
+  {
+    "id": 21,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Una reacción química que libera energía en forma de calor hacia el entorno se clasifica como:",
+    "opciones": [
+      "Endotérmica",
+      "Exotérmica",
+      "Reversible exclusivamente",
+      "Catalítica exclusivamente"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Una reacción endotérmica absorbe energía del entorno, en lugar de liberarla.",
+      "Una reacción exotérmica libera energía, generalmente en forma de calor, hacia el entorno durante su desarrollo.",
+      "La reversibilidad es una característica independiente del balance energético de la reacción.",
+      "El uso de un catalizador afecta la velocidad de reacción, no está definido por si la reacción libera o absorbe energía."
+    ]
+  },
+  {
+    "id": 22,
+    "textId": 3,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Se dispone de 200 mL de una solución 4 mol/L y se diluye agregando agua hasta completar 800 mL. Según M₁V₁=M₂V₂, ¿cuál es la nueva concentración?",
+    "opciones": [
+      "1 mol/L",
+      "16 mol/L",
+      "4 mol/L",
+      "0,5 mol/L"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Según M₁V₁=M₂V₂: (4)(0,2)=M₂(0,8), por lo que M₂=0,8/0,8=1 mol/L.",
+      "Ese valor resultaría de multiplicar en vez de dividir según la relación M₁V₁=M₂V₂.",
+      "La concentración cambia al diluir la solución; no permanece igual a la concentración inicial.",
+      "Ese valor no corresponde al resultado correcto de aplicar la fórmula de dilución con los datos entregados."
+    ]
+  },
+  {
+    "id": 23,
+    "textId": 3,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Al aumentar la superficie de contacto de un reactivo sólido (por ejemplo, moliéndolo en polvo), la velocidad de una reacción química generalmente:",
+    "opciones": [
+      "Disminuye, ya que hay menos partículas por unidad de volumen",
+      "No se ve afectada en absoluto",
+      "Aumenta, ya que se incrementan los puntos de contacto entre reactantes",
+      "Se detiene por completo"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Moler un sólido no reduce la cantidad de partículas reactivas disponibles, sino que expone más superficie de estas.",
+      "La superficie de contacto es uno de los factores que sí afecta la velocidad de una reacción química.",
+      "Al aumentar la superficie de contacto, se incrementan los puntos donde las partículas de los reactantes pueden colisionar y reaccionar, acelerando la reacción.",
+      "Aumentar la superficie de contacto acelera la reacción; no provoca su detención."
+    ]
+  },
+  {
+    "id": 24,
+    "textId": 3,
+    "habilidad": "Investigación científica",
+    "enunciado": "La cromatografía en papel, utilizada para separar los pigmentos de un extracto vegetal, se basa principalmente en:",
+    "opciones": [
+      "La distinta afinidad de cada pigmento con el papel y el solvente, lo que provoca que se desplacen a distinta velocidad",
+      "La diferencia de punto de ebullición entre los pigmentos",
+      "El tamaño de las partículas sólidas presentes en el extracto",
+      "La diferencia de densidad entre los pigmentos y el agua"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Cada pigmento interactúa de forma distinta con el papel (fase estacionaria) y el solvente (fase móvil), lo que hace que se desplacen a diferente velocidad y se separen.",
+      "El punto de ebullición es el fundamento de la destilación, no de la cromatografía en papel.",
+      "La cromatografía separa sustancias disueltas o suspendidas por afinidad, no principalmente por el tamaño de partículas sólidas.",
+      "La diferencia de densidad es el fundamento de la decantación, no de la cromatografía en papel."
+    ]
+  },
+  {
+    "id": 25,
+    "textId": 4,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Dos átomos del mismo elemento que tienen igual número atómico pero distinto número másico se denominan:",
+    "opciones": [
+      "Isómeros",
+      "Isótopos",
+      "Iones",
+      "Alótropos"
+    ],
+    "correcta": 1,
+    "expl": [
+      "Los isómeros son compuestos orgánicos con la misma fórmula molecular pero distinta estructura, un concepto distinto al de isótopo.",
+      "Los isótopos son átomos de un mismo elemento (igual número atómico) que difieren en su número de neutrones y, por lo tanto, en su número másico.",
+      "Los iones son átomos o moléculas con carga eléctrica por pérdida o ganancia de electrones, no por diferencias en el número de neutrones.",
+      "Los alótropos son formas distintas en que se puede presentar un mismo elemento (como el grafito y el diamante para el carbono), no átomos individuales con distinto número de neutrones."
+    ]
+  },
+  {
+    "id": 26,
+    "textId": 4,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "El número de electrones de valencia de un elemento representativo se relaciona directamente con:",
+    "opciones": [
+      "El grupo de la tabla periódica al que pertenece",
+      "El periodo de la tabla periódica al que pertenece",
+      "Su estado físico a temperatura ambiente",
+      "Su color característico"
+    ],
+    "correcta": 0,
+    "expl": [
+      "En los elementos representativos, el número de electrones de valencia coincide con el número de grupo (usando la numeración tradicional), determinando su comportamiento químico.",
+      "El periodo se relaciona con el número de niveles de energía ocupados, no directamente con el número de electrones de valencia.",
+      "El estado físico depende de las fuerzas intermoleculares del elemento, no directamente del número de electrones de valencia.",
+      "El color no está determinado por el número de electrones de valencia de forma directa y general."
+    ]
+  },
+  {
+    "id": 27,
+    "textId": 4,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un ion tiene 15 protones y 18 electrones. ¿Cuál es su carga neta?",
+    "opciones": [
+      "-3",
+      "+3",
+      "+18",
+      "-15"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Con más electrones (18) que protones (15), el ion tiene una carga neta negativa igual a la diferencia: 15−18=−3.",
+      "Una carga +3 correspondería a un catión con más protones que electrones, situación contraria a la del ion descrito.",
+      "Ese valor no corresponde al cálculo de la carga neta, que depende de la diferencia entre protones y electrones.",
+      "Ese valor no corresponde al cálculo correcto de la carga neta a partir de los datos entregados."
+    ]
+  },
+  {
+    "id": 28,
+    "textId": 4,
+    "habilidad": "Investigación científica",
+    "enunciado": "La espectrometría de masas permite a los científicos determinar la abundancia relativa de los distintos isótopos de un elemento principalmente porque:",
+    "opciones": [
+      "Mide directamente el color de la muestra analizada",
+      "Solo puede analizar elementos en estado gaseoso a temperatura ambiente",
+      "Separa los átomos según su masa y carga, permitiendo cuantificar cada tipo de isótopo presente",
+      "Destruye la muestra sin posibilidad de obtener información cuantitativa"
+    ],
+    "correcta": 2,
+    "expl": [
+      "La espectrometría de masas no se basa en el color de la muestra, sino en propiedades de masa y carga de las partículas.",
+      "La técnica puede aplicarse a muestras vaporizadas o ionizadas de diversos estados originales, no se limita a elementos gaseosos a temperatura ambiente.",
+      "Este método separa iones según su relación masa/carga, lo que permite identificar y cuantificar la proporción de cada isótopo presente en la muestra.",
+      "Aunque la muestra se ioniza durante el análisis, la técnica sí entrega información cuantitativa precisa sobre la composición isotópica."
+    ]
+  },
+  {
+    "id": 29,
+    "textId": 5,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Dos compuestos orgánicos que comparten la misma fórmula molecular pero presentan distinta disposición estructural de sus átomos se denominan:",
+    "opciones": [
+      "Isótopos",
+      "Alótropos",
+      "Isómeros",
+      "Polímeros"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Los isótopos se refieren a átomos de un mismo elemento con distinto número de neutrones, un concepto distinto al de compuestos orgánicos con igual fórmula.",
+      "Los alótropos corresponden a formas distintas de un mismo elemento químico, no a compuestos orgánicos con igual fórmula molecular.",
+      "Los isómeros comparten la misma fórmula molecular, pero difieren en la disposición estructural de sus átomos, lo que les confiere propiedades distintas.",
+      "Los polímeros son macromoléculas formadas por la repetición de unidades más pequeñas, un concepto distinto al de isomería."
+    ]
+  },
+  {
+    "id": 30,
+    "textId": 5,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Un polímero, como el polietileno, se forma principalmente mediante:",
+    "opciones": [
+      "La fusión de un solo átomo de carbono con distintos elementos",
+      "Un enlace iónico entre un metal y un no metal",
+      "La descomposición de una macromolécula en fragmentos menores",
+      "La unión repetida de unidades más pequeñas llamadas monómeros"
+    ],
+    "correcta": 3,
+    "expl": [
+      "Un polímero no se forma a partir de un único átomo, sino de la repetición de unidades moleculares completas.",
+      "Los polímeros orgánicos se forman por enlaces covalentes entre átomos de carbono, no por enlaces iónicos metal-no metal.",
+      "La formación de un polímero es un proceso de unión (polimerización), no de descomposición de una macromolécula existente.",
+      "Un polímero es una macromolécula formada por la unión repetida de unidades más simples, los monómeros, mediante enlaces covalentes."
+    ]
+  },
+  {
+    "id": 31,
+    "textId": 5,
+    "habilidad": "Análisis de datos",
+    "enunciado": "Un compuesto orgánico presenta el grupo carbonilo (C=O) en un carbono terminal de la cadena. Este compuesto corresponde probablemente a:",
+    "opciones": [
+      "Un alcohol",
+      "Un ácido carboxílico sin grupo OH",
+      "Una cetona",
+      "Un aldehído"
+    ],
+    "correcta": 3,
+    "expl": [
+      "Los alcoholes se caracterizan por el grupo hidroxilo (-OH), no por el grupo carbonilo en posición terminal.",
+      "Un ácido carboxílico incluye tanto el grupo carbonilo como un grupo hidroxilo (-COOH); no puede definirse como tal sin el grupo OH.",
+      "En las cetonas, el grupo carbonilo se ubica en un carbono interno de la cadena, no en uno terminal.",
+      "Cuando el grupo carbonilo se ubica en un carbono terminal de la cadena, el compuesto corresponde a un aldehído."
+    ]
+  },
+  {
+    "id": 32,
+    "textId": 6,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Una reacción endotérmica se caracteriza porque, durante su desarrollo:",
+    "opciones": [
+      "Libera energía calórica hacia el entorno",
+      "No involucra ningún intercambio de energía",
+      "Absorbe energía desde el entorno para llevarse a cabo",
+      "Siempre ocurre de manera espontánea a temperatura ambiente"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Liberar energía calórica es característico de las reacciones exotérmicas, no de las endotérmicas.",
+      "Toda reacción química involucra algún intercambio energético; las endotérmicas se caracterizan justamente por absorber energía.",
+      "Una reacción endotérmica requiere absorber energía del entorno para que los reactantes se transformen en productos.",
+      "La espontaneidad de una reacción depende de varios factores termodinámicos, no únicamente de si es endotérmica."
+    ]
+  },
+  {
+    "id": 33,
+    "textId": 6,
+    "habilidad": "Análisis de datos",
+    "enunciado": "En la reacción CaCO₃ → CaO + CO₂, se descomponen 2 moles de CaCO₃. Si la masa molar del CaO es 56 g/mol, ¿cuántos gramos de CaO se producen?",
+    "opciones": [
+      "56 g",
+      "28 g",
+      "112 g",
+      "2 g"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Ese valor corresponde a la masa molar del CaO, sin considerar que se descomponen 2 moles de CaCO₃.",
+      "Ese valor resultaría de dividir en vez de multiplicar la masa molar por el número de moles.",
+      "Según la proporción 1:1 de la ecuación balanceada, se producen 2 moles de CaO: masa=2×56=112 g.",
+      "Ese valor corresponde solamente al número de moles, sin realizar la conversión a masa mediante la masa molar."
+    ]
+  },
+  {
+    "id": 34,
+    "textId": 6,
+    "habilidad": "Análisis de datos",
+    "enunciado": "En un experimento, el rendimiento teórico de un producto era 40 g, pero en la práctica se obtuvieron 32 g. ¿Cuál es el rendimiento porcentual de la reacción?",
+    "opciones": [
+      "80%",
+      "125%",
+      "32%",
+      "8%"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Rendimiento porcentual = (rendimiento real/rendimiento teórico)×100 = (32/40)×100=80%.",
+      "Ese valor resultaría de invertir la relación entre rendimiento real y teórico.",
+      "Ese valor corresponde solo al rendimiento real en gramos, no al porcentaje respecto del rendimiento teórico.",
+      "Ese valor no corresponde al cálculo correcto de la razón entre rendimiento real y teórico."
+    ]
+  },
+  {
+    "id": 35,
+    "textId": 6,
+    "habilidad": "Conocimiento científico",
+    "enunciado": "Un aumento de la temperatura generalmente acelera la velocidad de una reacción química principalmente porque:",
+    "opciones": [
+      "Disminuye el número de colisiones entre las partículas reactantes",
+      "Reduce la concentración de los reactantes disponibles",
+      "Aumenta la energía cinética de las partículas, incrementando la frecuencia y efectividad de las colisiones",
+      "Elimina por completo la energía de activación de la reacción"
+    ],
+    "correcta": 2,
+    "expl": [
+      "Un aumento de temperatura incrementa, no disminuye, la frecuencia de colisiones entre las partículas.",
+      "La temperatura no reduce la concentración de los reactantes; afecta la energía y el movimiento de las partículas.",
+      "Al aumentar la temperatura, las partículas se mueven con mayor energía cinética, lo que incrementa tanto la frecuencia como la efectividad de las colisiones entre reactantes.",
+      "La energía de activación es una propiedad de la reacción que no desaparece con el aumento de temperatura; lo que cambia es la fracción de partículas capaz de superarla."
+    ]
+  },
+  {
+    "id": 36,
+    "textId": 6,
+    "habilidad": "Investigación científica",
+    "enunciado": "En el proceso industrial de Haber-Bosch para sintetizar amoníaco (N₂ + 3H₂ → 2NH₃), se utiliza un catalizador principalmente para:",
+    "opciones": [
+      "Acelerar la reacción, permitiendo obtener amoníaco a una velocidad industrialmente viable",
+      "Aumentar la cantidad de nitrógeno disponible en la reacción",
+      "Cambiar los productos finales de la reacción",
+      "Absorber el calor liberado sin afectar la velocidad de reacción"
+    ],
+    "correcta": 0,
+    "expl": [
+      "Sin catalizador, la reacción entre N₂ y H₂ sería demasiado lenta a temperaturas moderadas; el catalizador acelera el proceso, haciéndolo viable a escala industrial.",
+      "El catalizador no modifica la cantidad de reactantes disponibles en el sistema.",
+      "Un catalizador no cambia la naturaleza de los productos formados, solo la velocidad a la que se alcanza el equilibrio.",
+      "La función principal del catalizador es cinética, relacionada con la velocidad de reacción, no con la absorción de calor liberado."
+    ]
+  }
+];
+
+const TOTAL_Q = QUESTIONS.length;
+const TIME_LIMIT = 4500; // 1h15min en segundos
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let currentQIndex = 0;
+let answers = {}; // {questionId: optionIndex}
+let finished = false;
+
+// Colores por competencia (mismos que en los módulos: Resolver problemas índigo, Modelar teal, Representar ámbar)
+const HAB_COLORS = {
+  "Conocimiento científico": {
+    "main": "#2563eb",
+    "soft": "#dbeafe",
+    "dark": "#1e40af"
+  },
+  "Análisis de datos": {
+    "main": "#d97706",
+    "soft": "#fef3c7",
+    "dark": "#92400e"
+  },
+  "Investigación científica": {
+    "main": "#16a34a",
+    "soft": "#dcfce7",
+    "dark": "#166534"
+  }
+};
+
+// ============ NAVEGACIÓN PORTADA -> EXAMEN ============
+document.getElementById('btnComenzar').addEventListener('click', ()=>{
+  document.getElementById('portada').style.display='none';
+  document.getElementById('examen').style.display='block';
+  initTabs();
+  initPalette();
+  renderQuestion(0);
+  startTimer();
+});
+
+function initTabs(){
+  const cont = document.getElementById('tabsTextos');
+  cont.innerHTML = TEXTS.map(t=>`<button class="tabTexto" data-tid="${t.id}">${t.titulo}</button>`).join('');
+  cont.querySelectorAll('.tabTexto').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tid = parseInt(btn.dataset.tid);
+      const firstQ = QUESTIONS.findIndex(q=>q.textId===tid);
+      if(firstQ>=0) renderQuestion(firstQ);
+    });
+  });
+}
+
+function initPalette(){
+  const grid = document.getElementById('paletteGrid');
+  grid.innerHTML = QUESTIONS.map((q,i)=>`<button class="paletteBtn" data-idx="${i}">${i+1}</button>`).join('');
+  grid.querySelectorAll('.paletteBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=> renderQuestion(parseInt(btn.dataset.idx)));
+  });
+}
+
+function renderQuestion(idx){
+  currentQIndex = idx;
+  const q = QUESTIONS[idx];
+  const text = TEXTS.find(t=>t.id===q.textId);
+
+  // tabs activo
+  document.querySelectorAll('.tabTexto').forEach(b=>{
+    b.classList.toggle('activo', parseInt(b.dataset.tid)===text.id);
+  });
+
+  // panel eje / formulario de apoyo
+  const panelTexto = document.getElementById('panelTexto');
+  panelTexto.innerHTML = `<span class="tipoTexto">${text.tipo}</span><h2>${text.titulo}</h2>` +
+    `<div class="formulaBox">${text.contenido.split('\n').join('<br><br>')}</div>`;
+
+  // progreso
+  document.getElementById('progresoTxt').textContent = `Pregunta ${idx+1} de ${TOTAL_Q}`;
+  document.getElementById('numPreguntaLbl').textContent = `Pregunta ${idx+1}`;
+
+  // enunciado
+  document.getElementById('enunciadoTxt').textContent = q.enunciado;
+
+  // opciones
+  const letras = ['A','B','C','D'];
+  const cont = document.getElementById('opcionesCont');
+  cont.innerHTML = q.opciones.map((op,i)=>{
+    const marcada = answers[q.id]===i ? 'marcada' : '';
+    return `<button class="opcion ${marcada}" data-oi="${i}"><span class="letra">${letras[i]}</span><span>${op}</span></button>`;
+  }).join('');
+  cont.querySelectorAll('.opcion').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      answers[q.id] = parseInt(btn.dataset.oi);
+      renderQuestion(currentQIndex);
+      updatePalette();
+    });
+  });
+
+  // nav prev/next
+  document.getElementById('btnPrev').disabled = idx===0;
+  document.getElementById('btnNext').disabled = idx===TOTAL_Q-1;
+
+  updatePalette();
+}
+
+function updatePalette(){
+  document.querySelectorAll('.paletteBtn').forEach((btn,i)=>{
+    btn.classList.toggle('respondida', answers[QUESTIONS[i].id]!==undefined);
+    btn.classList.toggle('activa', i===currentQIndex);
+  });
+}
+
+document.getElementById('btnPrev').addEventListener('click', ()=>{
+  if(currentQIndex>0) renderQuestion(currentQIndex-1);
+});
+document.getElementById('btnNext').addEventListener('click', ()=>{
+  if(currentQIndex<TOTAL_Q-1) renderQuestion(currentQIndex+1);
+});
+
+// ============ TIMER ============
+function startTimer(){
+  updateTimerDisplay();
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    updateTimerDisplay();
+    if(timeLeft<=0){
+      clearInterval(timerInterval);
+      finalizarPrueba(true);
+    }
+  },1000);
+}
+
+function updateTimerDisplay(){
+  const h = Math.floor(timeLeft/3600);
+  const m = Math.floor((timeLeft%3600)/60);
+  const s = timeLeft%60;
+  const el = document.getElementById('timer');
+  el.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.classList.toggle('alerta', timeLeft<=300);
+}
+
+// ============ FINALIZAR ============
+document.getElementById('btnFinalizar').addEventListener('click', ()=>{
+  const sinResponder = TOTAL_Q - Object.keys(answers).length;
+  let msg = '¿Seguro que quieres finalizar la prueba?';
+  if(sinResponder>0) msg = `Tienes ${sinResponder} pregunta(s) sin responder. ¿Seguro que quieres finalizar?`;
+  document.getElementById('modalTexto').textContent = msg;
+  document.getElementById('modalOverlay').classList.add('activo');
+});
+
+document.getElementById('modalCancelar').addEventListener('click', ()=>{
+  document.getElementById('modalOverlay').classList.remove('activo');
+});
+
+document.getElementById('modalConfirmar').addEventListener('click', ()=>{
+  document.getElementById('modalOverlay').classList.remove('activo');
+  finalizarPrueba(false);
+});
+
+function finalizarPrueba(porTiempo){
+  if(finished) return;
+  finished = true;
+  clearInterval(timerInterval);
+  document.getElementById('examen').style.display='none';
+  document.getElementById('resultados').style.display='block';
+  calcularResultados();
+}
+
+// ============ RESULTADOS ============
+function calcularResultados(){
+  let correctas = 0;
+  const habStats = {'Conocimiento científico':{total:0,correctas:0}, 'Análisis de datos':{total:0,correctas:0}, 'Investigación científica':{total:0,correctas:0}};
+
+  QUESTIONS.forEach(q=>{
+    habStats[q.habilidad].total++;
+    if(answers[q.id]===q.correcta){
+      correctas++;
+      habStats[q.habilidad].correctas++;
+    }
+  });
+
+  const pctGlobal = Math.round((correctas/TOTAL_Q)*100);
+  document.getElementById('scoreBig').textContent = `${correctas}/${TOTAL_Q}`;
+  document.getElementById('scorePct').textContent = `${pctGlobal}% de logro`;
+
+  // barras por competencia
+  const habRows = document.getElementById('habRows');
+  habRows.innerHTML = Object.keys(habStats).map(h=>{
+    const s = habStats[h];
+    const pct = s.total>0 ? Math.round((s.correctas/s.total)*100) : 0;
+    const c = HAB_COLORS[h];
+    return `<div class="habRow">
+      <span class="dotHab" style="background:${c.main}"></span>
+      <span class="nom">${h}</span>
+      <span class="barBg"><span class="barFill" style="width:${pct}%;background:${c.main}"></span></span>
+      <span class="pct">${pct}%</span>
+    </div>`;
+  }).join('');
+
+  // diagnóstico + CTA
+  let habilidadesOrdenadas = Object.keys(habStats).map(h=>({
+    nombre:h,
+    pct: habStats[h].total>0 ? (habStats[h].correctas/habStats[h].total)*100 : 0
+  })).sort((a,b)=>a.pct-b.pct);
+  const masDebil = habilidadesOrdenadas[0];
+
+  let nivel, packSugerido;
+  if(pctGlobal < 50){
+    nivel = 'inicial';
+    packSugerido = 'Escalera Inicial, con foco en fundamentos de Ciencias – Química';
+  } else if(pctGlobal < 75){
+    nivel = 'intermedio';
+    packSugerido = 'Escalera Intermedia, para consolidar y subir tu puntaje de forma sostenida';
+  } else {
+    nivel = 'avanzado';
+    packSugerido = 'un pack orientado a tu carrera, para afinar detalles y asegurar tu puntaje';
+  }
+
+  document.getElementById('diagnosticoTxt').innerHTML =
+    `Obtuviste <strong>${correctas} de ${TOTAL_Q}</strong> preguntas correctas (${pctGlobal}% de logro). ` +
+    `Tu competencia con mayor margen de mejora es <strong>${masDebil.nombre}</strong> (${Math.round(masDebil.pct)}% de logro en esa competencia). ` +
+    `Según tu resultado, te recomendamos ${packSugerido}, priorizando ejercicios de ${masDebil.nombre.toLowerCase()}.`;
+
+  document.getElementById('ctaTexto').textContent =
+    `Con tu nivel actual, ${packSugerido}.`;
+
+  // revisión detallada
+  renderRevision();
+}
+
+function renderRevision(){
+  const cont = document.getElementById('revision');
+  const letras = ['A','B','C','D'];
+  cont.innerHTML = TEXTS.map(text=>{
+    const qs = QUESTIONS.filter(q=>q.textId===text.id);
+    const qsHtml = qs.map((q,i)=>{
+      const globalIdx = QUESTIONS.indexOf(q)+1;
+      const marcada = answers[q.id];
+      const optsHtml = q.opciones.map((op,oi)=>{
+        let cls='neutra';
+        if(oi===q.correcta) cls='correcta';
+        else if(oi===marcada) cls='marcadaIncorrecta';
+        return `<div class="revOpt ${cls}">${letras[oi]}. ${op}${oi===q.correcta?' ✓':''}${(oi===marcada && oi!==q.correcta)?' (tu respuesta)':''}<br><small>${q.expl[oi]}</small></div>`;
+      }).join('');
+      return `<div class="revQ">
+        <span class="revHab" style="color:${HAB_COLORS[q.habilidad].dark};background:${HAB_COLORS[q.habilidad].soft}">${q.habilidad}</span>
+        <div class="revEnun">${globalIdx}. ${q.enunciado}</div>
+        ${optsHtml}
+      </div>`;
+    }).join('');
+    return `<h3 style="margin-top:24px;">${text.titulo}</h3>${qsHtml}`;
+  }).join('');
+}
+
+document.getElementById('btnRevisar').addEventListener('click', ()=>{
+  const rev = document.getElementById('revision');
+  const btn = document.getElementById('btnRevisar');
+  const visible = rev.style.display==='block';
+  rev.style.display = visible ? 'none' : 'block';
+  btn.textContent = visible ? 'Revisar respuestas y explicaciones' : 'Ocultar revisión';
+});
+</script>
+</body>
+</html>
